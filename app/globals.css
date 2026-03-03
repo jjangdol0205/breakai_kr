@@ -1,0 +1,41 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  body {
+    @apply bg-[#000] text-slate-200 font-sans antialiased;
+  }
+}
+
+/* Custom Scrollbar for "Premium" feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+  /* slate-50 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  /* slate-300 */
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  /* slate-400 */
+}
+
+/* ANTI-COPY & ANTI-PRINT PROTECTION */
+@media print {
+  body {
+    display: none !important;
+  }
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}

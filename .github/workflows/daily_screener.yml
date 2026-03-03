@@ -1,0 +1,48 @@
+name: Daily O'Neil Screener & AI Analyst
+
+on:
+  schedule:
+    # Runs at 21:00 UTC every day.
+    # 21:00 UTC corresponds to 06:00 AM KST (Korean Standard Time)
+    # This ensures the US market is closed and data is ready before picking the day's breakout stock.
+    - cron: '0 21 * * *'
+  workflow_dispatch:
+    # Allows you to manually trigger the run from the GitHub Actions tab anytime
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci || npm install # Fallback to install if package-lock is missing
+
+      - name: Run Breakout AI Screener
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/oneil_screener.mjs
+
+      - name: Auto-commit and Push generated reports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          # Check if there are any changes to commit before running git commit
+          if ! git diff --staged --quiet; then
+            git commit -m "🤖 Auto-generated Daily AI Stock Report [skip ci]"
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi

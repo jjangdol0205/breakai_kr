@@ -1,0 +1,44 @@
+{
+  "name": "truth_of_market",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^3.0.30",
+    "@fontsource/inter": "^5.2.8",
+    "@google/generative-ai": "^0.24.1",
+    "@next/third-parties": "^16.1.6",
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.97.0",
+    "@tailwindcss/typography": "^0.5.19",
+    "adm-zip": "^0.5.16",
+    "ai": "^6.0.97",
+    "axios": "^1.13.6",
+    "cross-fetch": "^4.1.0",
+    "dotenv": "^17.3.1",
+    "lucide-react": "^0.574.0",
+    "next": "16.1.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-gauge-component": "^2.0.26",
+    "react-markdown": "^10.1.0",
+    "remark-breaks": "^4.0.0",
+    "resend": "^6.9.2",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
