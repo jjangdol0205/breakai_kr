@@ -122,7 +122,7 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                     {json_data?.verdict || "강력 매수"}
                                 </p>
                             </div>
-                            
+
                             {/* Visual Progress Bar instead of Radar Chart for simplicity & elegance */}
                             <div className="mt-6 space-y-3 relative z-10">
                                 <div>
@@ -131,7 +131,7 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                         <span className="text-white">{scoreObj.total}/100</span>
                                     </div>
                                     <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
-                                        <div className="h-full bg-red-500 rounded-full transition-all duration-1000 ease-out" style={{ width: \`\${scoreObj.total}%\`}}></div>
+                                        <div className="h-full bg-red-500 rounded-full transition-all duration-1000 ease-out" style={{ width: `${scoreObj.total}%` }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -166,10 +166,10 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                     </div>
 
                     {/* Fundamental Report Without Paywall */}
-            <div className="mt-8 transition-all">
-                <div className="bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
-                    <div className="prose prose-invert prose-lg max-w-none relative z-10
+                    <div className="mt-8 transition-all">
+                        <div className="bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
+                            <div className="prose prose-invert prose-lg max-w-none relative z-10
                                         prose-headings:font-black prose-headings:tracking-tighter 
                                         prose-h1:text-5xl prose-h1:text-white prose-h1:mb-12 prose-h1:border-b-2 prose-h1:border-[#333] prose-h1:pb-6
                                         prose-h2:text-3xl prose-h2:text-[#FF3333] prose-h2:mt-16 prose-h2:mb-6 prose-h2:uppercase prose-h2:tracking-widest
@@ -182,22 +182,23 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                         prose-hr:border-[#222] prose-hr:my-12
                                         prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
                                     ">
-                        {markdown ? (
-                            <TypewriterMarkdown
-                                content={markdown.includes('<!-- FUNDAMENTAL_REPORT -->')
-                                    ? markdown.split('<!-- TECHNICAL_REPORT -->')[0].replace('<!-- FUNDAMENTAL_REPORT -->', '').replace(/```json[\\s\\S]*?```/, '')
-                                    : markdown.replace(/```json[\\s\\S]*?```/, '')}
-                                speed={5}
-                            />
-                        ) : (
-                            <div className="flex flex-col items-center justify-center py-20 opacity-50">
-                                <div className="w-12 h-12 border-4 border-[#FF3333]/20 border-t-[#FF3333] rounded-full animate-spin mb-4"></div>
-                                <p className="text-zinc-400 font-mono tracking-widest uppercase text-sm">알파 창출 중...</p>
+                                {markdown ? (
+                                    <TypewriterMarkdown
+                                        content={markdown.includes('<!-- FUNDAMENTAL_REPORT -->')
+                                            ? markdown.split('<!-- TECHNICAL_REPORT -->')[0].replace('<!-- FUNDAMENTAL_REPORT -->', '').replace(/```json[\\s\\S]*?```/, '')
+                                            : markdown.replace(/```json[\\s\\S]*?```/, '')}
+                                        speed={5}
+                                    />
+                                ) : (
+                                    <div className="flex flex-col items-center justify-center py-20 opacity-50">
+                                        <div className="w-12 h-12 border-4 border-[#FF3333]/20 border-t-[#FF3333] rounded-full animate-spin mb-4"></div>
+                                        <p className="text-zinc-400 font-mono tracking-widest uppercase text-sm">알파 창출 중...</p>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
-            </div>
             )}
 
             {/* TAB CONTENT: TECHNICAL */}
