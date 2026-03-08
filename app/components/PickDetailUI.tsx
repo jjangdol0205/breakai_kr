@@ -45,15 +45,21 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
     let reportData = { json_data: null as any, markdown: "" };
     if (pick.ai_report) {
         let parsedPayload: any = {};
-        try {
-            parsedPayload = JSON.parse(pick.ai_report);
-        } catch (e) { }
 
-        reportData.markdown = parsedPayload.markdown || pick.ai_report;
+        // Handle case where ai_report might already be an object
+        if (typeof pick.ai_report === 'object') {
+            parsedPayload = pick.ai_report;
+        } else {
+            try {
+                parsedPayload = JSON.parse(pick.ai_report);
+            } catch (e) { }
+        }
+
+        reportData.markdown = parsedPayload.markdown || (typeof pick.ai_report === 'string' ? pick.ai_report : "");
         reportData.json_data = parsedPayload.json_data || null;
 
         // Extract the JSON block for the score breakdown if not natively parsed
-        if (!reportData.json_data && reportData.markdown) {
+        if (!reportData.json_data && typeof reportData.markdown === 'string') {
             const jsonMatch = reportData.markdown.match(/```json\s*(\{[\s\S]*?\})\s*```/);
             if (jsonMatch) {
                 try {
