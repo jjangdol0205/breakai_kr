@@ -44,12 +44,10 @@ export default async function PickDetail({ params }: { params: Promise<{ id: str
     // Regular Paywall logic + Admin Bypass - TEMPORARILY OPEN FOR PREVIEW REVIEWS
     const isProUser = true; // isAdmin || isDbPro || false;
 
-    // Fetch live quote for ROI
-    const livePrice = await fetchLiveQuote(pick.ticker);
-    let roi = null;
-    if (livePrice && pick.picked_price) {
-        roi = ((livePrice - pick.picked_price) / pick.picked_price) * 100;
-    }
+    // Fetch live quote for Daily Return
+    const quote = await fetchLiveQuote(pick.ticker);
+    const livePrice = quote?.price || null;
+    const roi = quote?.changePercent || null;
 
     let details = pick.technical_details;
     if (typeof details === 'string') {

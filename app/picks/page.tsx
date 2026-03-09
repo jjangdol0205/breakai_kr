@@ -24,11 +24,9 @@ export default async function PicksPage() {
     // Fetch live quotes for all picks in parallel
     const picksWithPrices = await Promise.all((picks || []).map(async (pick) => {
         const yfTicker = getTickerByName(pick.ticker) || pick.ticker;
-        const livePrice = await fetchLiveQuote(yfTicker);
-        let roi = null;
-        if (livePrice && pick.picked_price) {
-            roi = ((livePrice - pick.picked_price) / pick.picked_price) * 100;
-        }
+        const quote = await fetchLiveQuote(yfTicker);
+        const livePrice = quote?.price || null;
+        const roi = quote?.changePercent || null;
         return { ...pick, livePrice, roi };
     }));
 
@@ -63,7 +61,7 @@ export default async function PicksPage() {
                 <div className="flex flex-col md:flex-row justify-between items-end md:items-center mb-10 pb-4 border-b border-white/5 gap-4">
                     <div className="flex items-center gap-3">
                         <Presentation className="w-6 h-6 text-zinc-400" />
-                        <h2 className="text-2xl font-black tracking-tighter text-white font-sans">과거 핵심 픽 시그널</h2>
+                        <h2 className="text-2xl font-black tracking-tighter text-white font-sans">추천 기업</h2>
                     </div>
                     <div className="text-zinc-500 text-sm font-bold tracking-widest flex gap-6 font-sans">
                         <span className="flex items-center gap-1">분석 대상: 1000개 이상의 국내 주요 주식</span>
@@ -145,7 +143,7 @@ export default async function PicksPage() {
                                 {/* ROI Display */}
                                 <div className={`md:w-auto relative z-10 w-full flex items-center justify-between md:justify-end gap-10 border-t md:border-none pt-5 md:pt-0 ${isLatest ? 'border-zinc-800/50' : 'border-white/5'}`}>
                                     <div className="text-left md:text-right hidden sm:block">
-                                        <p className={`text-xs font-bold tracking-wide mb-1.5 font-sans ${isLatest ? 'text-zinc-400' : 'text-zinc-500'}`}>현재 수익률</p>
+                                        <p className={`text-xs font-bold tracking-wide mb-1.5 font-sans ${isLatest ? 'text-zinc-400' : 'text-zinc-500'}`}>현재주가(일수익률%)</p>
                                         <div className="flex items-baseline gap-2 justify-start md:justify-end">
                                             {pick.roi !== null ? (
                                                 <>
