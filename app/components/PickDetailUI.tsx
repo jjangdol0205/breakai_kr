@@ -39,7 +39,6 @@ interface PickDetailUIProps {
 }
 
 export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps) {
-    const [activeTab, setActiveTab] = useState<"technical" | "fundamental">("fundamental");
 
     // Attempt to parse AI Report String into JSON + Markdown
     let reportData = { json_data: null as any, markdown: "" };
@@ -93,28 +92,13 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
     }
 
     return (
-        <div className="w-full">
-            {/* Tab Navigation */}
-            <div className="flex border-b border-[#333] mt-12 mb-8 bg-[#09090b] rounded-t-xl overflow-hidden">
-                <button
-                    onClick={() => setActiveTab("fundamental")}
-                    className={`flex-1 p-5 text-sm md:text-base font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${activeTab === "fundamental" ? "bg-zinc-900 border-b-2 border-[#FF3333] text-[#FF3333]" : "text-zinc-500 hover:text-white hover:bg-zinc-900/50 border-b-2 border-transparent"}`}
-                >
-                    <FileText className="w-5 h-5" />
-                    <span className="hidden sm:inline">기관급</span> 심층 리포트
-                </button>
-                <button
-                    onClick={() => setActiveTab("technical")}
-                    className={`flex-1 p-5 text-sm md:text-base font-bold uppercase tracking-widest flex items-center justify-center gap-2 transition-colors ${activeTab === "technical" ? "bg-zinc-900 border-b-2 border-[#FF3333] text-[#FF3333]" : "text-zinc-500 hover:text-white hover:bg-zinc-900/50 border-b-2 border-transparent"}`}
-                >
-                    <BarChart2 className="w-5 h-5" />
-                    기술적 설정 검증
-                </button>
-            </div>
+        <div className="w-full mt-12">
 
-            {/* TAB CONTENT: FUNDAMENTAL */}
-            {activeTab === "fundamental" && (
-                <div className="space-y-8 animate-in fade-in duration-500 bg-[#0a0a0c] p-6 rounded-b-xl border border-t-0 border-[#333]">
+            {/* CONTINUOUS CONTENT: COMBINED */}
+            <div className="space-y-12 animate-in fade-in duration-500 bg-[#0a0a0c] p-6 lg:p-10 rounded-xl border border-[#333]">
+
+                {/* 1. FUNDAMENTAL / KEY STATS */}
+                <div className="space-y-8">
                     {/* Top Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800 md:col-span-2 flex flex-col justify-center relative overflow-hidden">
@@ -205,27 +189,33 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                         </div>
                     </div>
                 </div>
-            )}
+            </div>
 
-            {/* TAB CONTENT: TECHNICAL */}
-            {activeTab === "technical" && (
-                <div className="space-y-8 animate-in fade-in duration-500 bg-[#0a0a0c] p-6 rounded-b-xl border border-t-0 border-[#333]">
-                    <section className="bg-zinc-900/50 p-6 md:p-8 rounded-2xl border border-zinc-800 relative overflow-hidden shadow-xl">
-                        <div className="absolute left-0 top-0 w-1 h-full bg-[#FF3333]"></div>
-                        <h3 className="text-[#FF3333] font-bold text-xs mb-3 flex items-center tracking-widest uppercase font-mono">
-                            <span className="w-2 h-2 bg-[#FF3333] rounded-full mr-3 animate-pulse"></span>
-                            알고리즘 설정 상세
-                        </h3>
-                        <p className="text-lg text-zinc-300 leading-relaxed font-mono">
-                            {details?.message || "전체 AI 리포트에 집계된 기술적 세부 정보입니다."}
-                        </p>
-                    </section>
+            {/* Divider */}
+            <div className="w-full h-px bg-zinc-800 my-16 relative">
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0c] px-4">
+                    <BarChart2 className="w-6 h-6 text-zinc-600" />
+                </div>
+            </div>
 
-                    {/* Detailed Technical Report Without Paywall */}
-                    {markdown && markdown.includes('<!-- TECHNICAL_REPORT -->') && (
-                        <div className="mt-8 mb-8 bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
-                            <div className="prose prose-invert prose-lg max-w-none relative z-10
+            {/* 2. TECHNICAL ANALYSIS */}
+            <div className="space-y-8">
+                <section className="bg-zinc-900/50 p-6 md:p-8 rounded-2xl border border-zinc-800 relative overflow-hidden shadow-xl">
+                    <div className="absolute left-0 top-0 w-1 h-full bg-[#FF3333]"></div>
+                    <h3 className="text-[#FF3333] font-bold text-xs mb-3 flex items-center tracking-widest uppercase font-mono">
+                        <span className="w-2 h-2 bg-[#FF3333] rounded-full mr-3 animate-pulse"></span>
+                        알고리즘 설정 상세
+                    </h3>
+                    <p className="text-lg text-zinc-300 leading-relaxed font-mono">
+                        {details?.message || "전체 AI 리포트에 집계된 기술적 세부 정보입니다."}
+                    </p>
+                </section>
+
+                {/* Detailed Technical Report Without Paywall */}
+                {markdown && markdown.includes('<!-- TECHNICAL_REPORT -->') && (
+                    <div className="mt-8 mb-8 bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
+                        <div className="prose prose-invert prose-lg max-w-none relative z-10
                                                 prose-headings:font-black prose-headings:tracking-tighter 
                                                 prose-h1:text-5xl prose-h1:text-white prose-h1:mb-12 prose-h1:border-b-2 prose-h1:border-[#333] prose-h1:pb-6
                                                 prose-h2:text-3xl prose-h2:text-[#FF3333] prose-h2:mt-16 prose-h2:mb-6 prose-h2:uppercase prose-h2:tracking-widest
@@ -238,27 +228,26 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                                 prose-hr:border-[#222] prose-hr:my-12
                                                 prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
                                             ">
-                                <ReactMarkdown remarkPlugins={[remarkBreaks]}>
-                                    {markdown.split('<!-- TECHNICAL_REPORT -->')[1]}
-                                </ReactMarkdown>
-                            </div>
+                            <ReactMarkdown remarkPlugins={[remarkBreaks]}>
+                                {markdown.split('<!-- TECHNICAL_REPORT -->')[1]}
+                            </ReactMarkdown>
+                        </div>
+                    </div>
+                )}
+
+                <section className={`w-full ${pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ') ? 'h-auto bg-transparent border-0' : 'h-[700px] rounded-2xl border border-zinc-800 bg-black pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]'} relative overflow-hidden mt-8`}>
+                    {!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && (
+                        <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
+                            <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
+                                <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
+                            </span>
                         </div>
                     )}
-
-                    <section className={`w-full ${pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ') ? 'h-auto bg-transparent border-0' : 'h-[700px] rounded-2xl border border-zinc-800 bg-black pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]'} relative overflow-hidden mt-8`}>
-                        {!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && (
-                            <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
-                                <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
-                                    <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
-                                </span>
-                            </div>
-                        )}
-                        <div className={`w-full h-full ${!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && 'border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5'}`}>
-                            <TradingViewWidget ticker={pick.ticker} />
-                        </div>
-                    </section>
-                </div>
-            )}
+                    <div className={`w-full h-full ${!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && 'border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5'}`}>
+                        <TradingViewWidget ticker={pick.ticker} />
+                    </div>
+                </section>
+            </div>
         </div>
     );
 }
