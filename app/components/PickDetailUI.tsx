@@ -169,31 +169,22 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                     </div>
                 </div>
 
-                {/* 2. CHART SECTION */}
-                <div className="space-y-8 mt-16 bg-zinc-950/50 rounded-2xl border border-white/5 p-4 lg:p-6 backdrop-blur-md">
-                    <section className="w-full h-[600px] md:h-[700px] rounded-xl border border-white/10 bg-black pt-16 pb-2 px-2 shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 shadow-lg">
-                            <span className="text-xs text-red-400 font-medium font-mono uppercase tracking-widest flex items-center">
-                                <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
-                            </span>
-                        </div>
-                        <div className="w-full h-full rounded-lg overflow-hidden ring-1 ring-white/5">
-                            <TradingViewWidget ticker={
-                                (() => {
-                                    // 1. Try to extract from string if formatted like "셀트리온 (068270)"
-                                    const match = pick.ticker.match(/\((.*?)\)/);
-                                    if (match) return match[1];
+                {/* 2. EXTERNAL CHART BUTTON */}
+                <div className="mt-16 w-full">
+                    <TradingViewWidget ticker={
+                        (() => {
+                            // 1. Try to extract from string if formatted like "셀트리온 (068270)"
+                            const match = pick.ticker.match(/\((.*?)\)/);
+                            if (match) return match[1];
 
-                                    // 2. Try to lookup in KOREAN_STOCKS by name
-                                    const ksMatch = KOREAN_STOCKS.find(ks => ks.name === pick.ticker);
-                                    if (ksMatch) return ksMatch.ticker;
+                            // 2. Try to lookup in KOREAN_STOCKS by name
+                            const ksMatch = KOREAN_STOCKS.find(ks => ks.name === pick.ticker);
+                            if (ksMatch) return ksMatch.ticker;
 
-                                    // 3. Fallback
-                                    return pick.ticker;
-                                })()
-                            } />
-                        </div>
-                    </section>
+                            // 3. Fallback
+                            return pick.ticker;
+                        })()
+                    } />
                 </div>
             </div>
         </div>

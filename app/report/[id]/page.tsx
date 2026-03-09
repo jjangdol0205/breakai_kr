@@ -162,14 +162,9 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                 </div>
             </section>
 
-            {/* Always Visible: TradingView Chart */}
-            <section className="w-full h-[500px] rounded-xl overflow-hidden border border-zinc-800 bg-[#131722] shadow-2xl relative pt-16 pb-4 px-4">
-                <div className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-zinc-800">
-                    <span className="text-xs text-red-400 font-mono">TECHNICAL ANALYSIS: STAGE ANALYSIS</span>
-                </div>
-                <div className="w-full h-full border border-zinc-900/50 rounded overflow-hidden">
-                    <TradingViewWidget ticker={report.ticker} />
-                </div>
+            {/* Always Visible: External TradingView Button */}
+            <section className="w-full rounded-xl overflow-hidden border border-zinc-800/50 relative shadow-2xl mt-8">
+                <TradingViewWidget ticker={report.ticker} />
             </section>
 
             {/* The Paywall Logic */}

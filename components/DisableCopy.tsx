@@ -38,13 +38,11 @@ export default function DisableCopy() {
             // Win+Shift+S (Windows)
             if (e.shiftKey && e.metaKey && e.key.toLowerCase() === "s") {
                 e.preventDefault();
-                blankScreen();
             }
 
             // Mac Shift+Cmd+3, 4, 5
             if (e.shiftKey && e.metaKey && ["3", "4", "5"].includes(e.key)) {
                 e.preventDefault();
-                blankScreen();
             }
 
             // Prevent developer tools shortcuts like F12
@@ -56,7 +54,6 @@ export default function DisableCopy() {
         const handleKeyUp = (e: KeyboardEvent) => {
             if (e.key === "PrintScreen") {
                 navigator.clipboard.writeText("화면 캡처가 차단되었습니다.");
-                blankScreen();
             }
         };
 
@@ -67,33 +64,11 @@ export default function DisableCopy() {
             }
         };
 
-        // A lot of snipping tools cause the window to lose focus when activated
-        const handleWindowBlur = () => {
-            document.body.style.filter = "blur(8px)";
-            document.body.style.opacity = "0.05"; // Show a faint outline to prevent "broken screen" panic
-        };
-
-        const handleWindowFocus = () => {
-            document.body.style.filter = "blur(0px)";
-            document.body.style.opacity = "1";
-        };
-
-        let blankTimeout: NodeJS.Timeout;
-        const blankScreen = () => {
-            document.body.style.display = "none";
-            clearTimeout(blankTimeout);
-            blankTimeout = setTimeout(() => {
-                document.body.style.display = "block";
-            }, 500); // Hide for 500ms when print screen is pressed
-        };
-
         document.addEventListener("contextmenu", handleContextMenu);
         document.addEventListener("copy", handleCopy);
         document.addEventListener("keydown", handleKeyDown);
         document.addEventListener("keyup", handleKeyUp);
         document.addEventListener("dragstart", handleDragStart);
-        window.addEventListener("blur", handleWindowBlur);
-        window.addEventListener("focus", handleWindowFocus);
 
         return () => {
             document.removeEventListener("contextmenu", handleContextMenu);
@@ -101,9 +76,6 @@ export default function DisableCopy() {
             document.removeEventListener("keydown", handleKeyDown);
             document.removeEventListener("keyup", handleKeyUp);
             document.removeEventListener("dragstart", handleDragStart);
-            window.removeEventListener("blur", handleWindowBlur);
-            window.removeEventListener("focus", handleWindowFocus);
-            clearTimeout(blankTimeout);
         };
     }, []);
 
