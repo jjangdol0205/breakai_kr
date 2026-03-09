@@ -91,6 +91,9 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
         livePrice = Number(pick.picked_price) * (1 + (roi / 100));
     }
 
+    // Robust regex to detect Korean stocks regardless of format (e.g. 005930, 005930.KS, KRX:005930)
+    const isKoreanStock = /^\d{6}(\.K[SQ])?$|^K(?:RX|OSDAQ):\d{6}$/i.test(pick.ticker);
+
     return (
         <div className="w-full mt-12">
 
@@ -155,16 +158,18 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                         </div>
                     </div>
 
-                    {/* Fundamental Report Without Paywall */}
-                    <div className="mt-8 transition-all">
+                    {/* Unified AI Report Without Paywall */}
+                    <div className="mt-12 transition-all">
                         <div className="bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
-                            <div className="prose prose-invert prose-lg max-w-none relative z-10
+
+                            {markdown ? (
+                                <div className="prose prose-invert prose-lg max-w-none relative z-10
                                         prose-headings:font-black prose-headings:tracking-tighter 
-                                        prose-h1:text-5xl prose-h1:text-white prose-h1:mb-12 prose-h1:border-b-2 prose-h1:border-[#333] prose-h1:pb-6
-                                        prose-h2:text-3xl prose-h2:text-[#FF3333] prose-h2:mt-16 prose-h2:mb-6 prose-h2:uppercase prose-h2:tracking-widest
-                                        prose-h3:text-2xl prose-h3:text-white prose-h3:mt-10 prose-h3:mb-4
-                                        prose-h4:text-xl prose-h4:text-zinc-300
+                                        prose-h1:text-4xl md:prose-h1:text-5xl prose-h1:text-white prose-h1:mb-12 prose-h1:border-b-2 prose-h1:border-[#333] prose-h1:pb-6
+                                        prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:text-[#FF3333] prose-h2:mt-16 prose-h2:mb-6 prose-h2:uppercase prose-h2:tracking-widest
+                                        prose-h3:text-xl md:prose-h3:text-2xl prose-h3:text-white prose-h3:mt-10 prose-h3:mb-4
+                                        prose-h4:text-lg md:prose-h4:text-xl prose-h4:text-zinc-300
                                         prose-p:leading-loose prose-p:text-zinc-400 prose-p:mb-6 prose-p:text-base md:prose-p:text-lg
                                         prose-strong:text-white prose-strong:font-bold
                                         prose-li:text-zinc-400 prose-li:mb-2 prose-li:leading-relaxed
@@ -172,81 +177,36 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                         prose-hr:border-[#222] prose-hr:my-12
                                         prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
                                     ">
-                                {markdown ? (
                                     <TypewriterMarkdown
-                                        content={markdown.includes('<!-- FUNDAMENTAL_REPORT -->')
-                                            ? markdown.split('<!-- TECHNICAL_REPORT -->')[0].replace('<!-- FUNDAMENTAL_REPORT -->', '').replace(/```json[\\s\\S]*?```/, '')
-                                            : markdown.replace(/```json[\\s\\S]*?```/, '')}
+                                        content={markdown.replace('<!-- FUNDAMENTAL_REPORT -->', '').replace('<!-- TECHNICAL_REPORT -->', '').replace(/```json[\s\S]*?```/, '')}
                                         speed={5}
                                     />
-                                ) : (
-                                    <div className="flex flex-col items-center justify-center py-20 opacity-50">
-                                        <div className="w-12 h-12 border-4 border-[#FF3333]/20 border-t-[#FF3333] rounded-full animate-spin mb-4"></div>
-                                        <p className="text-zinc-400 font-mono tracking-widest uppercase text-sm">알파 창출 중...</p>
-                                    </div>
-                                )}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center py-20 opacity-50 relative z-10">
+                                    <div className="w-12 h-12 border-4 border-[#FF3333]/20 border-t-[#FF3333] rounded-full animate-spin mb-4"></div>
+                                    <p className="text-zinc-400 font-mono tracking-widest uppercase text-sm">알파 창출 중...</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. CHART SECTION */}
+                <div className="space-y-8 mt-12 bg-black/40 rounded-2xl border border-[#222] p-6 lg:p-8">
+                    <section className={`w-full ${isKoreanStock ? 'h-auto bg-transparent border-0' : 'h-[700px] rounded-2xl border border-zinc-800 bg-black pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]'} relative overflow-hidden`}>
+                        {!isKoreanStock && (
+                            <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
+                                <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
+                                    <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
+                                </span>
                             </div>
+                        )}
+                        <div className={`w-full h-full ${!isKoreanStock && 'border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5'}`}>
+                            <TradingViewWidget ticker={pick.ticker} />
                         </div>
-                    </div>
+                    </section>
                 </div>
-            </div>
-
-            {/* Divider */}
-            <div className="w-full h-px bg-zinc-800 my-16 relative">
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0c] px-4">
-                    <BarChart2 className="w-6 h-6 text-zinc-600" />
-                </div>
-            </div>
-
-            {/* 2. TECHNICAL ANALYSIS */}
-            <div className="space-y-8">
-                <section className="bg-zinc-900/50 p-6 md:p-8 rounded-2xl border border-zinc-800 relative overflow-hidden shadow-xl">
-                    <div className="absolute left-0 top-0 w-1 h-full bg-[#FF3333]"></div>
-                    <h3 className="text-[#FF3333] font-bold text-xs mb-3 flex items-center tracking-widest uppercase font-mono">
-                        <span className="w-2 h-2 bg-[#FF3333] rounded-full mr-3 animate-pulse"></span>
-                        알고리즘 설정 상세
-                    </h3>
-                    <p className="text-lg text-zinc-300 leading-relaxed font-mono">
-                        {details?.message || "전체 AI 리포트에 집계된 기술적 세부 정보입니다."}
-                    </p>
-                </section>
-
-                {/* Detailed Technical Report Without Paywall */}
-                {markdown && markdown.includes('<!-- TECHNICAL_REPORT -->') && (
-                    <div className="mt-8 mb-8 bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
-                        <div className="prose prose-invert prose-lg max-w-none relative z-10
-                                                prose-headings:font-black prose-headings:tracking-tighter 
-                                                prose-h1:text-5xl prose-h1:text-white prose-h1:mb-12 prose-h1:border-b-2 prose-h1:border-[#333] prose-h1:pb-6
-                                                prose-h2:text-3xl prose-h2:text-[#FF3333] prose-h2:mt-16 prose-h2:mb-6 prose-h2:uppercase prose-h2:tracking-widest
-                                                prose-h3:text-2xl prose-h3:text-white prose-h3:mt-10 prose-h3:mb-4
-                                                prose-h4:text-xl prose-h4:text-zinc-300
-                                                prose-p:leading-loose prose-p:text-zinc-400 prose-p:mb-6 prose-p:text-base md:prose-p:text-lg
-                                                prose-strong:text-white prose-strong:font-bold
-                                                prose-li:text-zinc-400 prose-li:mb-2 prose-li:leading-relaxed
-                                                prose-ul:my-8 prose-ol:my-8
-                                                prose-hr:border-[#222] prose-hr:my-12
-                                                prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
-                                            ">
-                            <ReactMarkdown remarkPlugins={[remarkBreaks]}>
-                                {markdown.split('<!-- TECHNICAL_REPORT -->')[1]}
-                            </ReactMarkdown>
-                        </div>
-                    </div>
-                )}
-
-                <section className={`w-full ${pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ') ? 'h-auto bg-transparent border-0' : 'h-[700px] rounded-2xl border border-zinc-800 bg-black pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]'} relative overflow-hidden mt-8`}>
-                    {!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && (
-                        <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
-                            <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
-                                <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
-                            </span>
-                        </div>
-                    )}
-                    <div className={`w-full h-full ${!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && 'border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5'}`}>
-                        <TradingViewWidget ticker={pick.ticker} />
-                    </div>
-                </section>
             </div>
         </div>
     );

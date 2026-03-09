@@ -5,8 +5,9 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
   const containerId = `tv_chart_${ticker}`;
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isKoreanStock = ticker.endsWith('.KS') || ticker.endsWith('.KQ');
-  const naverTickerCode = ticker.split('.')[0];
+  const isKoreanStock = /^\d{6}(\.K[SQ])?$|^K(?:RX|OSDAQ):\d{6}$/i.test(ticker);
+  const naverTickerMatch = ticker.match(/\d{6}/);
+  const naverTickerCode = naverTickerMatch ? naverTickerMatch[0] : ticker.split('.')[0];
   const naverChartUrl = `https://ssl.pstatic.net/imgfinance/chart/item/candle/day/${naverTickerCode}.png?sidcode=${new Date().getTime()}`;
 
   useEffect(() => {
