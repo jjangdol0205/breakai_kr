@@ -97,7 +97,7 @@ export default async function PickDetail({ params }: { params: Promise<{ id: str
                                 <div className="flex flex-col md:items-end justify-center ml-2">
                                     <div className="flex items-baseline gap-2 mb-1">
                                         <span className="text-4xl font-black font-mono tracking-tight text-white">
-                                            {pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')
+                                            {yfTicker.endsWith('.KS') || yfTicker.endsWith('.KQ')
                                                 ? `₩${livePrice?.toLocaleString('ko-KR')}`
                                                 : `$${livePrice?.toFixed(2)}`}
                                         </span>
@@ -106,7 +106,7 @@ export default async function PickDetail({ params }: { params: Promise<{ id: str
                                         </span>
                                     </div>
                                     <p className="text-zinc-500 text-xs font-mono uppercase tracking-widest">
-                                        진입가: {pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')
+                                        진입가: {yfTicker.endsWith('.KS') || yfTicker.endsWith('.KQ')
                                             ? `₩${Number(pick.picked_price).toLocaleString('ko-KR')}`
                                             : `$${Number(pick.picked_price).toFixed(2)}`}
                                     </p>
