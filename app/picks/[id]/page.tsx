@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { fetchLiveQuote } from "../../../utils/yahooFinance";
+import { getNameByTicker } from "../../../utils/koreanStocks";
 import TradingViewWidget from "../../../components/TradingViewWidget";
 import PickDetailUI from "../../components/PickDetailUI";
 
@@ -72,8 +73,9 @@ export default async function PickDetail({ params }: { params: Promise<{ id: str
                             <BarChart className="text-blue-500 w-10 h-10" />
                         </div>
                         <div>
-                            <h1 className="text-5xl font-black tracking-tighter text-white mb-1">
-                                {pick.ticker}
+                            <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white mb-1 flex items-baseline gap-2 flex-wrap">
+                                <span className="break-keep">{getNameByTicker(pick.ticker)}</span>
+                                <span className="text-xl md:text-2xl text-zinc-500 font-mono tracking-wide">({pick.ticker.split('.')[0]})</span>
                             </h1>
                             <p className="text-blue-400 flex items-center font-mono text-xs font-bold tracking-widest uppercase mb-1">
                                 <Activity className="w-3 h-3 mr-1" /> 기관 시그널 #{pick.id.split('-')[0]}

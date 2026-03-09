@@ -120,9 +120,9 @@ export default async function PicksPage() {
                                     </div>
                                     <div>
                                         {isLatest && <span className="text-red-500 text-[10px] font-bold tracking-wide mb-1.5 flex items-center gap-1 font-sans"><Activity className="w-3 h-3" /> 최신 픽업 종목</span>}
-                                        <h3 className={`text-3xl font-sans font-black tracking-tight leading-none mb-2 flex items-baseline gap-2 ${isLatest ? 'text-white' : 'text-zinc-200'} group-hover:text-white transition-colors`}>
-                                            {getNameByTicker(pick.ticker)}
-                                            <span className="text-lg text-zinc-500 font-mono tracking-wide hidden sm:inline-block">({pick.ticker.split('.')[0]})</span>
+                                        <h3 className={`text-2xl md:text-3xl font-sans font-black tracking-tight leading-none mb-2 flex flex-wrap items-baseline gap-2 ${isLatest ? 'text-white' : 'text-zinc-200'} group-hover:text-white transition-colors`}>
+                                            <span className="break-keep">{getNameByTicker(pick.ticker)}</span>
+                                            <span className="text-sm md:text-lg text-zinc-500 font-mono tracking-wide hidden sm:inline-block">({pick.ticker.split('.')[0]})</span>
                                         </h3>
                                         <p className={`text-sm font-sans tracking-wide ${isLatest ? 'text-zinc-400' : 'text-zinc-500'}`}>
                                             {new Date(pick.pick_date).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', year: 'numeric' })}
