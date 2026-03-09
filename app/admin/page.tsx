@@ -29,6 +29,9 @@ export default function AdminPage() {
     const [fetchingOneil, setFetchingOneil] = useState(true);
     const [runningScreener, setRunningScreener] = useState(false);
 
+    // For Daily Briefing
+    const [runningBriefing, setRunningBriefing] = useState(false);
+
     // For user management
     const [profiles, setProfiles] = useState<any[]>([]);
     const [fetchingProfiles, setFetchingProfiles] = useState(true);
@@ -159,6 +162,26 @@ export default function AdminPage() {
         }
     };
 
+    const handleRunBriefing = async () => {
+        setRunningBriefing(true);
+        setResult("마켓 브리핑을 생성하는 중입니다... (1~2분 소요 예정)");
+        try {
+            const res = await fetch('/api/admin/run-briefing', { method: 'POST' });
+            const data = await res.json();
+            if (data.error) {
+                setResult("Failed to generate briefing: " + data.error);
+            } else if (data.message) {
+                setResult(data.message); // If it says "Skipped: already exists"
+            } else {
+                setResult("✅ 마켓 브리핑 생성이 완료되었습니다: " + data.title);
+            }
+        } catch (e: any) {
+            setResult("Failed to trigger briefing: " + e.message);
+        } finally {
+            setRunningBriefing(false);
+        }
+    };
+
     const handleDeleteRequest = async (id: string) => {
         if (!confirm("Are you sure you want to delete this company request?")) return;
 
@@ -220,15 +243,25 @@ export default function AdminPage() {
                 <div className="flex flex-col gap-4">
                     <p className="text-zinc-400 text-sm mb-2">하단 버튼을 클릭하면 KOSPI/KOSDAQ 상장 기업 중 최적의 패턴을 스캔하고, 가장 조건에 부합하는 기업에 대한 AI 리서치 리포트를 자동으로 작성합니다.</p>
 
+                    <div className="flex flex-col md:flex-row gap-4">
+                        <button
+                            onClick={handleRunScreener}
+                            disabled={runningScreener || runningBriefing}
+                            className="w-full md:w-auto text-white bg-blue-600 hover:bg-blue-500 font-bold px-8 py-4 rounded-lg disabled:opacity-50 flex items-center justify-center transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap font-mono"
+                        >
+                            {runningScreener ? <Loader2 className="animate-spin mr-2 w-5 h-5" /> : <TrendingUp className="w-5 h-5 mr-2" />}
+                            {runningScreener ? "스캔 중..." : "일일 스크리너 실행"}
+                        </button>
 
-                    <button
-                        onClick={handleRunScreener}
-                        disabled={runningScreener}
-                        className="w-full md:w-auto text-white bg-blue-600 hover:bg-blue-500 font-bold px-8 py-4 rounded-lg disabled:opacity-50 flex items-center justify-center transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap font-mono"
-                    >
-                        {runningScreener ? <Loader2 className="animate-spin mr-2 w-5 h-5" /> : <TrendingUp className="w-5 h-5 mr-2" />}
-                        {runningScreener ? "스캔 중..." : "일일 스크리너 실행"}
-                    </button>
+                        <button
+                            onClick={handleRunBriefing}
+                            disabled={runningScreener || runningBriefing}
+                            className="w-full md:w-auto text-white bg-green-600 hover:bg-green-500 font-bold px-8 py-4 rounded-lg disabled:opacity-50 flex items-center justify-center transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap font-mono"
+                        >
+                            {runningBriefing ? <Loader2 className="animate-spin mr-2 w-5 h-5" /> : <FileText className="w-5 h-5 mr-2" />}
+                            {runningBriefing ? "생성 중..." : "일일 마켓 브리핑 생성"}
+                        </button>
+                    </div>
                 </div>
             </div>
 

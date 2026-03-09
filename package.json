@@ -28,6 +28,7 @@
     "react-gauge-component": "^2.0.26",
     "react-markdown": "^10.1.0",
     "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
     "resend": "^6.9.2",
     "xml2js": "^0.6.2"
   },

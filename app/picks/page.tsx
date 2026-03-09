@@ -51,6 +51,12 @@ export default async function PicksPage() {
                     <p className="text-lg md:text-xl text-zinc-400 max-w-3xl leading-relaxed mb-8 font-sans font-medium">
                         자체 알고리즘이 매일 유동성이 높은 KOSPI 및 KOSDAQ 우량 주식을 스캔합니다. 심층적인 펀더멘털 분석을 바탕으로 가장 상승 확률이 높은 종목만을 정밀하게 식별합니다.
                     </p>
+
+                    <div className="flex gap-4">
+                        <Link href="/briefing" className="inline-flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 px-6 rounded-lg transition-colors font-mono text-sm tracking-wide gap-2 border border-zinc-700">
+                            <span className="text-blue-400">📊</span> 일일 마켓 브리핑 읽기
+                        </Link>
+                    </div>
                 </div>
             </div>
 

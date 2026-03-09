@@ -68,6 +68,7 @@ export default function TopNav() {
                     BREAKAI<span className="text-red-500 text-3xl leading-none">.</span>
                 </Link>
                 <nav className="flex items-center text-sm text-zinc-400 font-bold tracking-wide gap-8">
+                    <Link href="/briefing" className="cursor-pointer hover:text-white transition-colors hidden md:inline font-sans font-semibold">마켓 브리핑</Link>
                     <Link href="/picks" className="cursor-pointer text-white hover:text-red-400 transition-colors hidden md:inline flex items-center gap-2">오늘의 픽 <span className="text-[10px] bg-red-500/20 text-red-500 border border-red-500/30 px-2 py-0.5 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.2)]">LIVE</span></Link>
                     <Link href="/about" className="cursor-pointer hover:text-white transition-colors hidden md:inline font-sans font-semibold">서비스 소개</Link>
 
