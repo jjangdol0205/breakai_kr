@@ -231,58 +231,46 @@ ${dartText}
 
 전문적이고 깊이 있는 "오늘의 주도주" 심층 분석 리포트를 한국어로 작성하십시오.
 
-**OUTPUT FORMAT (CRITICAL)**:
-You MUST structure your response exactly as follows. Do NOT deviate.
-
-1. First, provide the scores strictly in valid JSON wrapped in a \`\`\`json block.
-2. Second, output the EXACT marker \`<!-- FUNDAMENTAL_REPORT -->\`
-3. Third, output the Fundamental Report in Markdown.
-4. Fourth, output the EXACT marker \`<!-- TECHNICAL_REPORT -->\`
-5. Fifth, output the Technical Report in Markdown.
-
-\`\`\`json
-{
-  "investment_score": {
-    "total": 85,
-    "breakdown": [
-      { "category": "가치평가 (동종업계 대비)", "score": 22, "max_score": 30, "reason": "P/E가 확장 중이나 EPS 성장이 이를 정당화함." },
-      { "category": "펀더멘털 및 잉여현금흐름(FCF)", "score": 28, "max_score": 30, "reason": "부채 비율이 안정적이고 잉여현금흐름이 견고함." },
-      { "category": "기술적 추세 및 스마트머니", "score": 18, "max_score": 20, "reason": "224일 이동평균선 위에서 지속적인 거래량 누적." },
-      { "category": "투자 촉매제 및 시장 심리", "score": 17, "max_score": 20, "reason": "출시 예정인 신제품 사이클로 인해 기관 등급 상향 조정." }
-    ]
-  },
-  "verdict": "강력 매수",
-  "executive_summary": "이 펀더멘털 투자 논리를 요약하는 4개의 고부가 가치 핵심 항목(Bullet Point).",
-  "bull_case_summary": "이 주식이 폭발적으로 상승할 수밖에 없는 이유를 담은 날카로운 두 문장.",
-  "bear_case_summary": "이 주식에 치명적일 수 있는 위험 요소에 대한 날카로운 두 문장."
-}
-\`\`\`
-<!-- FUNDAMENTAL_REPORT -->
-# ${companyName} 기관급 기업 분석 리포트
-
-[목차]
-프롤로그: 기관의 엣지
-왜 지금 이 기업인가?
-제 1 장. 기업 재무 건전성 진단: 숫자는 거짓말을 하지 않는다
-제 2 장. 산업 및 매크로 분석: 거대한 패러다임 전환
-제 3 장. 알파 수익 선정: 왜 이 주식인가?
-제 4 장. 사업보고서(DART) 정밀 해부
-제 5 장. 비즈니스 모델(BM): 수익 파이프라인
-제 6 장. 핵심 경쟁 우위 (해자)
-제 7 장. 기관 수급 트리거: 왜 '지금' 사야 하는가?
-제 8 장. 리스크 평가: 투자 무효화 조건
-제 9 장. 밸류에이션 매트릭스: 상승 여력 추정
-
-<!-- TECHNICAL_REPORT -->
-# ${companyName} 스마트머니 및 알고리즘 검증 (기술적 분석)
-
-[목차]
-프롤로그: 타이밍의 예술
-제 1 장. 이동평균선 분석: 기관의 발자취
-제 2 장. 거래량 프로파일링: 스마트머니 해독
-제 3 장. 패턴 인식: 윌리엄 오닐 셋업 (컵앤핸들)
-제 4 장. 손익비(Risk/Reward): 비대칭 진입점
-`;
+234: **OUTPUT FORMAT (CRITICAL)**:
+235: You MUST structure your response exactly as follows. Do NOT deviate.
+236: 
+237: 1. First, provide the scores strictly in valid JSON wrapped in a \`\`\`json block.
+238: 2. Second, output the Markdown report that logically flows from Technical Analysis (Timing) to Fundamental Analysis (Conviction).
+239: 
+240: \`\`\`json
+241: {
+242:   "investment_score": {
+243:     "total": 85,
+244:     "breakdown": [
+245:       { "category": "가치평가 (동종업계 대비)", "score": 22, "max_score": 30, "reason": "P/E가 확장 중이나 EPS 성장이 이를 정당화함." },
+246:       { "category": "펀더멘털 및 잉여현금흐름(FCF)", "score": 28, "max_score": 30, "reason": "부채 비율이 안정적이고 잉여현금흐름이 견고함." },
+247:       { "category": "기술적 추세 및 스마트머니", "score": 18, "max_score": 20, "reason": "224일 이동평균선 위에서 지속적인 거래량 누적." },
+248:       { "category": "투자 촉매제 및 시장 심리", "score": 17, "max_score": 20, "reason": "출시 예정인 신제품 사이클로 인해 기관 등급 상향 조정." }
+249:     ]
+250:   },
+251:   "verdict": "강력 매수",
+252:   "executive_summary": "이 펀더멘털 투자 논리를 요약하는 4개의 고부가 가치 핵심 항목(Bullet Point).",
+253:   "bull_case_summary": "이 주식이 폭발적으로 상승할 수밖에 없는 이유를 담은 날카로운 두 문장.",
+254:   "bear_case_summary": "이 주식에 치명적일 수 있는 위험 요소에 대한 날카로운 두 문장."
+255: }
+256: \`\`\`
+257: 
+258: # ${companyName} 심층 분석 : 타이밍과 가치의 조화
+259: 
+260: [목차]
+261: 프롤로그: 왜 지금 이 기업인가?
+262: 제 1 장. 스마트머니의 궤적: 완벽한 기술적 타이밍 (이동평균선, 거래량, 돌파 차트 패턴)
+263: 제 2 장. 펀더멘털 정밀 해부: 숫자가 말해주는 강력한 내재 가치 바탕
+264: 제 3 장. 비즈니스 모델(BM) 및 압도적 경쟁 우위 (경제적 해자)
+265: 제 4 장. 폭발적 상승 트리거: 다가오는 어닝 모멘텀 및 수급 이슈
+266: 제 5 장. 리스크 요인 
+267: 제 6 장. 최종 목표가 및 투자 전략
+268: 
+269: **작성 지침**:
+270: - 가장 먼저 **제 1 장(기술적 분석)**에서 윌리엄 오닐의 철학을 가미하여 **"이 주식을 왜 하필 지금 사야 하는지(차트 타이밍)"**를 기술적으로 명쾌하게 서술하십시오.
+271: - 이어서 **제 2 장~제 4 장(기본적 분석)**에서 그 기술적 돌파를 탄탄하게 뒷받침하는 **"기업의 본질적 가치와 강력한 펀더멘털(DART 재무 데이터 포함)"**을 자연스럽게 풀어나가십시오.
+272: - 이전처럼 "기술적 분석"과 "기본적 분석"을 기계적이나 인위적으로 분리하지 말고, 하나의 거대한 투자 스토리텔링 라인으로 자연스럽고 유려하게 연결하십시오.
+273: `;
 
     try {
         const result = await model.generateContent(prompt);

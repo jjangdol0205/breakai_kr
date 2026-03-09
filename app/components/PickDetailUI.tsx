@@ -154,7 +154,7 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                         prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
                                     ">
                                     <ReactMarkdown remarkPlugins={[remarkBreaks]}>
-                                        {markdown.replace('<!-- FUNDAMENTAL_REPORT -->', '').replace('<!-- TECHNICAL_REPORT -->', '').replace(/```json[\s\S]*?```/, '')}
+                                        {markdown.replace(/```json[\s\S]*?```/, '')}
                                     </ReactMarkdown>
                                 </div>
                             ) : (
