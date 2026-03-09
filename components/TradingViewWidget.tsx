@@ -13,7 +13,7 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
       if (window.TradingView && containerRef.current) {
         new window.TradingView.widget({
           autosize: true,
-          symbol: ticker,
+          symbol: ticker.endsWith('.KS') ? `KRX:${ticker.replace('.KS', '')}` : (ticker.endsWith('.KQ') ? `KOSDAQ:${ticker.replace('.KQ', '')}` : ticker),
           interval: "D",
           timezone: "Asia/Seoul",
           theme: "dark",
