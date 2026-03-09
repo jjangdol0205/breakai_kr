@@ -38,21 +38,14 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
 
   // Clean, unified button layout for EVERY stock
   return (
-    <div className="w-full h-full min-h-[300px] flex flex-col items-center justify-center bg-zinc-950 rounded-xl p-8 text-center border border-white/5">
-      <Activity className="w-16 h-16 text-red-500/50 mb-6 animate-pulse" />
-      <h3 className="text-xl font-bold text-white/90 mb-3 tracking-wide">직관적인 실시간 차트 분석</h3>
-      <p className="text-zinc-500 max-w-md mb-8 font-mono text-sm leading-relaxed">
-        실시간 틱 데이터 및 보조지표 분석은 트레이딩뷰 플랫폼에서 가장 강력하게 지원됩니다.
-      </p>
-      <Link
-        href={`https://kr.tradingview.com/chart/?symbol=${tvSymbol}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center px-8 py-4 bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 hover:border-red-500/60 text-red-500 hover:text-red-400 font-bold rounded-xl transition-all duration-300 font-mono tracking-wider ring-1 ring-white/5 shadow-2xl"
-      >
-        <Activity className="w-5 h-5 mr-3" />
-        트레이딩뷰에서 {ticker.split('(')[0].trim()} 차트 열기
-      </Link>
-    </div>
+    <Link
+      href={`https://kr.tradingview.com/chart/?symbol=${tvSymbol}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-full flex items-center justify-center px-8 py-5 bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 text-zinc-300 hover:text-white font-bold rounded-xl transition-all duration-300 font-mono tracking-wider shadow-lg group"
+    >
+      <Activity className="w-5 h-5 mr-3 text-red-500 group-hover:scale-110 transition-transform" />
+      트레이딩뷰에서 <span className="text-white mx-2">{ticker.split('(')[0].trim()}</span> 차트 열기 &rarr;
+    </Link>
   );
 }
