@@ -1,15 +1,12 @@
 "use client";
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Activity } from 'lucide-react';
 
 import { KOREAN_STOCKS } from '../utils/koreanStocks';
 
 export default function TradingViewWidget({ ticker }: { ticker: string }) {
-  const containerId = `tv_chart_${ticker}`;
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // 1. First, try to extract a 6 digit code from the string (e.g., "셀트리온 (068270)")
+  // 1. Try to extract a 6 digit code from the string (e.g., "셀트리온 (068270)")
   let naverTickerCode = "";
   const naverTickerMatch = ticker.match(/\d{6}/);
 
@@ -27,9 +24,6 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
     }
   }
 
-  // 3. Ultra-permissive check if it's considered a Korean stock based on the code resolution
-  const isKoreanStock = Boolean(naverTickerCode) || ticker.endsWith('.KS') || ticker.endsWith('.KQ');
-
   // Hardcoded fallback for major Korean stocks missing from KOREAN_STOCKS to prevent breaking old records
   if (!naverTickerCode && !ticker.match(/^[A-Z]+$/)) {
     if (ticker === '셀트리온') naverTickerCode = '068270';
@@ -39,86 +33,26 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
     if (ticker === '에코프로') naverTickerCode = '086520';
   }
 
-  // 4. Force TradingView format to KRX if it somehow bypassed the check
+  // Force TradingView format to KRX if it's resolved as a Korean stock, otherwise use the regular ticker for US
   const tvSymbol = naverTickerCode ? `KRX:${naverTickerCode}` : ticker;
 
-  useEffect(() => {
-    // If it is a Korean stock, we do not load the embedded widget anymore per user request,
-    // because it defaults to AAPL chart.
-    if (isKoreanStock) return;
-
-    // Check if the script is already loaded to avoid duplicates
-    let script = document.getElementById('tradingview-widget-script') as HTMLScriptElement;
-
-    const initWidget = () => {
-      if (window.TradingView && containerRef.current) {
-        // Clear any existing content to prevent 'black screen' duplicates
-        containerRef.current.innerHTML = '';
-
-        new window.TradingView.widget({
-          autosize: true,
-          symbol: tvSymbol,
-          interval: "D",
-          timezone: "Asia/Seoul",
-          theme: "dark",
-          style: "1",
-          locale: "en",
-          enable_publishing: false,
-          hide_side_toolbar: false,
-          container_id: containerRef.current.id,
-          // 단테 기법 5, 15, 56, 112, 224일선 세팅 (Moving Averages)
-          studies: [
-            { id: "MASimple@tv-basicstudies", inputs: { length: 5 } },
-            { id: "MASimple@tv-basicstudies", inputs: { length: 15 } },
-            { id: "MASimple@tv-basicstudies", inputs: { length: 56 } },
-            { id: "MASimple@tv-basicstudies", inputs: { length: 112 } },
-            { id: "MASimple@tv-basicstudies", inputs: { length: 224 } }
-          ]
-        });
-      }
-    };
-
-    if (!script) {
-      script = document.createElement("script");
-      script.id = 'tradingview-widget-script';
-      script.src = "https://s3.tradingview.com/tv.js";
-      script.async = true;
-      script.onload = initWidget;
-      document.body.appendChild(script);
-    } else {
-      // Script already exists, just initialize the widget
-      initWidget();
-    }
-  }, [ticker, tvSymbol, isKoreanStock]); // Added isKoreanStock to dependency array
-
-  if (isKoreanStock) {
-    return (
-      <div className="w-full h-full min-h-[500px] flex flex-col items-center justify-center bg-zinc-950 rounded-xl p-8 text-center border border-white/5">
-        <Activity className="w-16 h-16 text-red-500/50 mb-6 animate-pulse" />
-        <h3 className="text-xl font-bold text-white/90 mb-3 tracking-wide">직관적인 실시간 차트 분석</h3>
-        <p className="text-zinc-500 max-w-md mb-8 font-mono text-sm leading-relaxed">
-          국내 주식의 실시간 틱 데이터 및 보조지표 분석은 트레이딩뷰 플랫폼에서 가장 강력하게 지원됩니다.
-        </p>
-        <Link
-          href={`https://kr.tradingview.com/chart/?symbol=${tvSymbol}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center px-8 py-4 bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 hover:border-red-500/60 text-red-500 hover:text-red-400 font-bold rounded-xl transition-all duration-300 font-mono tracking-wider ring-1 ring-white/5 shadow-2xl"
-        >
-          <Activity className="w-5 h-5 mr-3" />
-          트레이딩뷰에서 {ticker.split('(')[0].trim()} 차트 열기
-        </Link>
-      </div>
-    );
-  }
-
+  // Clean, unified button layout for EVERY stock
   return (
-    <div id={containerId} ref={containerRef} className="w-full h-full min-h-[500px]" />
+    <div className="w-full h-full min-h-[300px] flex flex-col items-center justify-center bg-zinc-950 rounded-xl p-8 text-center border border-white/5">
+      <Activity className="w-16 h-16 text-red-500/50 mb-6 animate-pulse" />
+      <h3 className="text-xl font-bold text-white/90 mb-3 tracking-wide">직관적인 실시간 차트 분석</h3>
+      <p className="text-zinc-500 max-w-md mb-8 font-mono text-sm leading-relaxed">
+        실시간 틱 데이터 및 보조지표 분석은 트레이딩뷰 플랫폼에서 가장 강력하게 지원됩니다.
+      </p>
+      <Link
+        href={`https://kr.tradingview.com/chart/?symbol=${tvSymbol}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center px-8 py-4 bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 hover:border-red-500/60 text-red-500 hover:text-red-400 font-bold rounded-xl transition-all duration-300 font-mono tracking-wider ring-1 ring-white/5 shadow-2xl"
+      >
+        <Activity className="w-5 h-5 mr-3" />
+        트레이딩뷰에서 {ticker.split('(')[0].trim()} 차트 열기
+      </Link>
+    </div>
   );
-}
-
-declare global {
-  interface Window {
-    TradingView: any;
-  }
 }
