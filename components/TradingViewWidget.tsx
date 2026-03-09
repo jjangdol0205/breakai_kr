@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import { Activity } from 'lucide-react';
 
 import { KOREAN_STOCKS } from '../utils/koreanStocks';
 
@@ -41,6 +43,10 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
   const tvSymbol = naverTickerCode ? `KRX:${naverTickerCode}` : ticker;
 
   useEffect(() => {
+    // If it is a Korean stock, we do not load the embedded widget anymore per user request,
+    // because it defaults to AAPL chart.
+    if (isKoreanStock) return;
+
     // Check if the script is already loaded to avoid duplicates
     let script = document.getElementById('tradingview-widget-script') as HTMLScriptElement;
 
@@ -83,7 +89,28 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
       // Script already exists, just initialize the widget
       initWidget();
     }
-  }, [ticker, tvSymbol]);
+  }, [ticker, tvSymbol, isKoreanStock]); // Added isKoreanStock to dependency array
+
+  if (isKoreanStock) {
+    return (
+      <div className="w-full h-full min-h-[500px] flex flex-col items-center justify-center bg-zinc-950 rounded-xl p-8 text-center border border-white/5">
+        <Activity className="w-16 h-16 text-red-500/50 mb-6 animate-pulse" />
+        <h3 className="text-xl font-bold text-white/90 mb-3 tracking-wide">직관적인 실시간 차트 분석</h3>
+        <p className="text-zinc-500 max-w-md mb-8 font-mono text-sm leading-relaxed">
+          국내 주식의 실시간 틱 데이터 및 보조지표 분석은 트레이딩뷰 플랫폼에서 가장 강력하게 지원됩니다.
+        </p>
+        <Link
+          href={`https://kr.tradingview.com/chart/?symbol=${tvSymbol}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center px-8 py-4 bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 hover:border-red-500/60 text-red-500 hover:text-red-400 font-bold rounded-xl transition-all duration-300 font-mono tracking-wider ring-1 ring-white/5 shadow-2xl"
+        >
+          <Activity className="w-5 h-5 mr-3" />
+          트레이딩뷰에서 {ticker.split('(')[0].trim()} 차트 열기
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div id={containerId} ref={containerRef} className="w-full h-full min-h-[500px]" />
