@@ -221,20 +221,9 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                         </p>
                     </section>
 
-                    <section className="w-full h-[700px] rounded-2xl overflow-hidden border border-zinc-800 bg-black relative pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                        <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
-                            <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
-                                <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
-                            </span>
-                        </div>
-                        <div className="w-full h-full border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5">
-                            <TradingViewWidget ticker={pick.ticker} />
-                        </div>
-                    </section>
-
                     {/* Detailed Technical Report Without Paywall */}
                     {markdown && markdown.includes('<!-- TECHNICAL_REPORT -->') && (
-                        <div className="mt-8 bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
+                        <div className="mt-8 mb-8 bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
                             <div className="prose prose-invert prose-lg max-w-none relative z-10
                                                 prose-headings:font-black prose-headings:tracking-tighter 
@@ -255,6 +244,19 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                             </div>
                         </div>
                     )}
+
+                    <section className={`w-full ${pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ') ? 'h-auto bg-transparent border-0' : 'h-[700px] rounded-2xl border border-zinc-800 bg-black pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]'} relative overflow-hidden mt-8`}>
+                        {!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && (
+                            <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
+                                <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
+                                    <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
+                                </span>
+                            </div>
+                        )}
+                        <div className={`w-full h-full ${!(pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ')) && 'border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5'}`}>
+                            <TradingViewWidget ticker={pick.ticker} />
+                        </div>
+                    </section>
                 </div>
             )}
         </div>

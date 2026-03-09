@@ -59,30 +59,20 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
   if (isKoreanStock) {
     const tvExternalLink = `https://kr.tradingview.com/chart/?symbol=KRX%3A${naverTickerCode}`;
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center bg-[#0a0a0c]/80 rounded-xl overflow-hidden p-8 border border-zinc-800 backdrop-blur-sm relative">
-        <div className="absolute inset-0 bg-blue-500/5 blur-3xl pointer-events-none rounded-full" />
-
-        <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 border border-blue-500/20 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-            <path d="M3 3v18h18" />
-            <path d="m19 9-5 5-4-4-3 3" />
-          </svg>
-        </div>
-
-        <h3 className="text-2xl font-black text-white mb-2 text-center tracking-tight">트레이딩뷰 차트 바로가기</h3>
-        <p className="text-zinc-400 text-center max-w-sm mb-8 leading-relaxed font-medium">
-          한국거래소(KRX) 데이터 정책으로 인해 국내 주식 위젯 연동이 제한됩니다. 실시간 기술적 분석 차트는 공식 홈페이지에서 확인하세요.
-        </p>
-
+      <div className="w-full flex justify-end mt-4">
         <a
           href={tvExternalLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative inline-flex items-center justify-center px-8 py-3.5 font-bold text-white transition-all duration-200 bg-blue-600 font-sans rounded-xl hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 focus:ring-offset-zinc-900 overflow-hidden shadow-lg shadow-blue-500/30 w-full md:w-auto"
+          className="group relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-zinc-300 transition-all duration-200 bg-zinc-900 border border-zinc-700 font-sans rounded-lg hover:bg-zinc-800 hover:text-white hover:border-zinc-500 shadow-sm"
         >
-          <span className="relative flex items-center gap-2">
-            차트 열기
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:translate-x-1"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+          <span className="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400 group-hover:text-blue-400 transition-colors">
+              <path d="M3 3v18h18" />
+              <path d="m19 9-5 5-4-4-3 3" />
+            </svg>
+            트레이딩뷰 차트 바로가기
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1 opacity-70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
           </span>
         </a>
       </div>
