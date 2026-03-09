@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import TradingViewWidget from "../../components/TradingViewWidget";
 import ScoreGauge from "../../components/ScoreGauge";
+import { KOREAN_STOCKS } from "../../utils/koreanStocks";
 
 // No custom typewriter needed; we will render standard ReactMarkdown instantly.
 interface PickDetailUIProps {
@@ -136,31 +137,32 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
 
                     {/* Unified AI Report Without Paywall */}
                     <div className="mt-12 transition-all">
-                        <div className="bg-black/80 rounded-2xl border border-[#222] p-8 md:p-14 shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FF3333]/5 rounded-full blur-[150px] pointer-events-none"></div>
+                        <div className="bg-zinc-950/80 backdrop-blur-xl rounded-2xl border border-white/5 p-8 md:p-14 shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[120px] pointer-events-none"></div>
 
                             {markdown ? (
                                 <div className="prose prose-invert prose-lg max-w-none relative z-10
-                                        prose-headings:font-black prose-headings:tracking-tighter 
-                                        prose-h1:text-4xl md:prose-h1:text-5xl prose-h1:text-white prose-h1:mb-12 prose-h1:border-b-2 prose-h1:border-[#333] prose-h1:pb-6
-                                        prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:text-[#FF3333] prose-h2:mt-16 prose-h2:mb-6 prose-h2:uppercase prose-h2:tracking-widest
-                                        prose-h3:text-xl md:prose-h3:text-2xl prose-h3:text-white prose-h3:mt-10 prose-h3:mb-4
-                                        prose-h4:text-lg md:prose-h4:text-xl prose-h4:text-zinc-300
-                                        prose-p:leading-loose prose-p:text-zinc-400 prose-p:mb-6 prose-p:text-base md:prose-p:text-lg
-                                        prose-strong:text-white prose-strong:font-bold
-                                        prose-li:text-zinc-400 prose-li:mb-2 prose-li:leading-relaxed
-                                        prose-ul:my-8 prose-ol:my-8
-                                        prose-hr:border-[#222] prose-hr:my-12
-                                        prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
+                                        font-sans
+                                        prose-headings:font-bold prose-headings:tracking-tight 
+                                        prose-h1:text-4xl md:prose-h1:text-5xl prose-h1:text-zinc-100 prose-h1:mb-14 prose-h1:border-b prose-h1:border-white/10 prose-h1:pb-8
+                                        prose-h2:text-2xl md:prose-h2:text-3xl prose-h2:text-red-400 prose-h2:mt-20 prose-h2:mb-8 prose-h2:font-medium
+                                        prose-h3:text-xl md:prose-h3:text-2xl prose-h3:text-zinc-200 prose-h3:mt-12 prose-h3:mb-6
+                                        prose-h4:text-lg md:prose-h4:text-xl prose-h4:text-zinc-400
+                                        prose-p:leading-[1.8] prose-p:text-zinc-400 prose-p:mb-8 prose-p:text-base md:prose-p:text-lg
+                                        prose-strong:text-zinc-200 prose-strong:font-semibold
+                                        prose-li:text-zinc-400 prose-li:mb-3 prose-li:leading-relaxed
+                                        prose-ul:my-8 prose-ol:my-8 prose-ul:list-disc prose-ol:list-decimal
+                                        prose-hr:border-white/10 prose-hr:my-16
+                                        prose-blockquote:border-l-2 prose-blockquote:border-red-500/50 prose-blockquote:bg-red-500/5 prose-blockquote:py-4 prose-blockquote:px-8 prose-blockquote:italic prose-blockquote:text-zinc-300
                                     ">
                                     <ReactMarkdown remarkPlugins={[remarkBreaks]}>
                                         {markdown.replace(/```json[\s\S]*?```/, '')}
                                     </ReactMarkdown>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center py-20 opacity-50 relative z-10">
-                                    <div className="w-12 h-12 border-4 border-[#FF3333]/20 border-t-[#FF3333] rounded-full animate-spin mb-4"></div>
-                                    <p className="text-zinc-400 font-mono tracking-widest uppercase text-sm">알파 창출 중...</p>
+                                <div className="flex flex-col items-center justify-center py-32 opacity-70 relative z-10">
+                                    <div className="w-10 h-10 border-2 border-red-500/20 border-t-red-500 rounded-full animate-spin mb-6"></div>
+                                    <p className="text-zinc-500 font-mono tracking-[0.2em] uppercase text-xs">알파 창출 중...</p>
                                 </div>
                             )}
                         </div>
@@ -168,17 +170,28 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                 </div>
 
                 {/* 2. CHART SECTION */}
-                <div className="space-y-8 mt-12 bg-black/40 rounded-2xl border border-[#222] p-6 lg:p-8">
-                    <section className={`w-full ${isKoreanStock ? 'h-auto bg-transparent border-0' : 'h-[700px] rounded-2xl border border-zinc-800 bg-black pt-16 pb-2 px-2 shadow-[0_0_50px_rgba(0,0,0,0.5)]'} relative overflow-hidden`}>
-                        {!isKoreanStock && (
-                            <div className="absolute top-4 left-4 z-10 bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-lg border border-zinc-700 shadow-lg">
-                                <span className="text-xs text-[#FF3333] font-bold font-mono uppercase tracking-widest flex items-center">
-                                    <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
-                                </span>
-                            </div>
-                        )}
-                        <div className={`w-full h-full ${!isKoreanStock && 'border border-zinc-900 rounded-xl overflow-hidden ring-1 ring-white/5'}`}>
-                            <TradingViewWidget ticker={pick.ticker} />
+                <div className="space-y-8 mt-16 bg-zinc-950/50 rounded-2xl border border-white/5 p-4 lg:p-6 backdrop-blur-md">
+                    <section className="w-full h-[600px] md:h-[700px] rounded-xl border border-white/10 bg-black pt-16 pb-2 px-2 shadow-2xl relative overflow-hidden">
+                        <div className="absolute top-4 left-4 z-10 bg-black/60 backdrop-blur-md px-4 py-2 rounded-lg border border-white/10 shadow-lg">
+                            <span className="text-xs text-red-400 font-medium font-mono uppercase tracking-widest flex items-center">
+                                <Activity className="w-4 h-4 mr-2 animate-pulse" /> 실시간 기관급 차트
+                            </span>
+                        </div>
+                        <div className="w-full h-full rounded-lg overflow-hidden ring-1 ring-white/5">
+                            <TradingViewWidget ticker={
+                                (() => {
+                                    // 1. Try to extract from string if formatted like "셀트리온 (068270)"
+                                    const match = pick.ticker.match(/\((.*?)\)/);
+                                    if (match) return match[1];
+
+                                    // 2. Try to lookup in KOREAN_STOCKS by name
+                                    const ksMatch = KOREAN_STOCKS.find(ks => ks.name === pick.ticker);
+                                    if (ksMatch) return ksMatch.ticker;
+
+                                    // 3. Fallback
+                                    return pick.ticker;
+                                })()
+                            } />
                         </div>
                     </section>
                 </div>
