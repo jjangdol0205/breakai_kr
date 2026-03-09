@@ -5,10 +5,15 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
   const containerId = `tv_chart_${ticker}`;
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const isKoreanStock = /^\d{6}(\.K[SQ])?$|^K(?:RX|OSDAQ):\d{6}$/i.test(ticker);
+  // Ultra-permissive check: basically if it contains 6 straight digits anywhere, or has .KS/.KQ, treat as Korean
+  const isKoreanStock = ticker.endsWith('.KS') || ticker.endsWith('.KQ') || /\d{6}/.test(ticker);
+
   const naverTickerMatch = ticker.match(/\d{6}/);
   const naverTickerCode = naverTickerMatch ? naverTickerMatch[0] : ticker.split('.')[0];
   const naverChartUrl = `https://ssl.pstatic.net/imgfinance/chart/item/candle/day/${naverTickerCode}.png?sidcode=${new Date().getTime()}`;
+
+  // Force TradingView format to KRX if it somehow bypassed the check
+  const tvSymbol = isKoreanStock ? `KRX:${naverTickerCode}` : ticker;
 
   useEffect(() => {
     if (isKoreanStock) return;
@@ -23,7 +28,7 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
 
         new window.TradingView.widget({
           autosize: true,
-          symbol: ticker,
+          symbol: tvSymbol,
           interval: "D",
           timezone: "Asia/Seoul",
           theme: "dark",

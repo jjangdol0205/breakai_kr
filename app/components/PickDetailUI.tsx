@@ -91,8 +91,8 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
         livePrice = Number(pick.picked_price) * (1 + (roi / 100));
     }
 
-    // Robust regex to detect Korean stocks regardless of format (e.g. 005930, 005930.KS, KRX:005930)
-    const isKoreanStock = /^\d{6}(\.K[SQ])?$|^K(?:RX|OSDAQ):\d{6}$/i.test(pick.ticker);
+    // Ultra-permissive check: basically if it contains 6 straight digits anywhere, or has .KS/.KQ, treat as Korean
+    const isKoreanStock = pick.ticker.endsWith('.KS') || pick.ticker.endsWith('.KQ') || /\d{6}/.test(pick.ticker);
 
     return (
         <div className="w-full mt-12">
