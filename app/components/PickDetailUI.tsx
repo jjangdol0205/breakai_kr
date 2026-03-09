@@ -7,31 +7,7 @@ import remarkBreaks from 'remark-breaks';
 import TradingViewWidget from "../../components/TradingViewWidget";
 import ScoreGauge from "../../components/ScoreGauge";
 
-// Custom Typewriter Effect for AI Reports
-const TypewriterMarkdown = ({ content, speed = 10 }: { content: string, speed?: number }) => {
-    const [displayedContent, setDisplayedContent] = useState('');
-
-    useEffect(() => {
-        let i = 0;
-        setDisplayedContent('');
-        const timer = setInterval(() => {
-            if (i < content.length) {
-                setDisplayedContent(prev => prev + content.charAt(i));
-                i++;
-            } else {
-                clearInterval(timer);
-            }
-        }, speed);
-        return () => clearInterval(timer);
-    }, [content, speed]);
-
-    return (
-        <ReactMarkdown remarkPlugins={[remarkBreaks]}>
-            {displayedContent + (displayedContent.length < content.length ? '...' : '')}
-        </ReactMarkdown>
-    );
-};
-
+// No custom typewriter needed; we will render standard ReactMarkdown instantly.
 interface PickDetailUIProps {
     pick: any; // The record from oneil_picks
     isProUser: boolean;
@@ -177,10 +153,9 @@ export default function PickDetailUI({ pick, isProUser, roi }: PickDetailUIProps
                                         prose-hr:border-[#222] prose-hr:my-12
                                         prose-blockquote:border-l-4 prose-blockquote:border-[#FF3333] prose-blockquote:bg-red-950/20 prose-blockquote:py-2 prose-blockquote:px-6 prose-blockquote:font-mono prose-blockquote:text-red-400 prose-blockquote:text-sm
                                     ">
-                                    <TypewriterMarkdown
-                                        content={markdown.replace('<!-- FUNDAMENTAL_REPORT -->', '').replace('<!-- TECHNICAL_REPORT -->', '').replace(/```json[\s\S]*?```/, '')}
-                                        speed={5}
-                                    />
+                                    <ReactMarkdown remarkPlugins={[remarkBreaks]}>
+                                        {markdown.replace('<!-- FUNDAMENTAL_REPORT -->', '').replace('<!-- TECHNICAL_REPORT -->', '').replace(/```json[\s\S]*?```/, '')}
+                                    </ReactMarkdown>
                                 </div>
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-20 opacity-50 relative z-10">
