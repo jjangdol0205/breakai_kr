@@ -25,8 +25,8 @@ export default async function PicksPage() {
     const picksWithPrices = await Promise.all((picks || []).map(async (pick) => {
         const yfTicker = getTickerByName(pick.ticker) || pick.ticker;
         const quote = await fetchLiveQuote(yfTicker);
-        const livePrice = quote?.price || null;
-        const roi = quote?.changePercent || null;
+        const livePrice = quote?.price ?? null;
+        const roi = quote?.changePercent ?? null;
         return { ...pick, livePrice, roi };
     }));
 

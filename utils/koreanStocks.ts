@@ -4,6 +4,13 @@ export interface KoreanStock {
 }
 
 export const KOREAN_STOCKS: KoreanStock[] = [
+    // Major Cap Fallbacks
+    { name: "삼성전자", ticker: "005930.KS" },
+    { name: "SK하이닉스", ticker: "000660.KS" },
+    { name: "셀트리온", ticker: "068270.KS" },
+    { name: "에코프로비엠", ticker: "247540.KQ" },
+    { name: "에코프로", ticker: "086520.KQ" },
+
     // KOSPI (Mid/Small Cap & Thematic)
     { name: "한미반도체", ticker: "042700.KS" },
     { name: "이수페타시스", ticker: "041590.KS" },

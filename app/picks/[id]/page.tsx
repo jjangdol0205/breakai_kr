@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import { fetchLiveQuote } from "../../../utils/yahooFinance";
-import { getNameByTicker } from "../../../utils/koreanStocks";
+import { getNameByTicker, getTickerByName } from "../../../utils/koreanStocks";
 import TradingViewWidget from "../../../components/TradingViewWidget";
 import PickDetailUI from "../../components/PickDetailUI";
 
@@ -45,9 +45,11 @@ export default async function PickDetail({ params }: { params: Promise<{ id: str
     const isProUser = true; // isAdmin || isDbPro || false;
 
     // Fetch live quote for Daily Return
-    const quote = await fetchLiveQuote(pick.ticker);
-    const livePrice = quote?.price || null;
-    const roi = quote?.changePercent || null;
+    const yfTicker = getTickerByName(pick.ticker) || pick.ticker;
+    const quote = await fetchLiveQuote(yfTicker);
+    console.log("FETCHED QUOTE for", pick.ticker, "->", yfTicker, ":", quote);
+    const livePrice = quote?.price ?? null;
+    const roi = quote?.changePercent ?? null;
 
     let details = pick.technical_details;
     if (typeof details === 'string') {
