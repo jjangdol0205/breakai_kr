@@ -5,7 +5,13 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
   const containerId = `tv_chart_${ticker}`;
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const isKoreanStock = ticker.endsWith('.KS') || ticker.endsWith('.KQ');
+  const naverTickerCode = ticker.split('.')[0];
+  const naverChartUrl = `https://ssl.pstatic.net/imgfinance/chart/item/candle/day/${naverTickerCode}.png?sidcode=${new Date().getTime()}`;
+
   useEffect(() => {
+    if (isKoreanStock) return;
+
     // Check if the script is already loaded to avoid duplicates
     let script = document.getElementById('tradingview-widget-script') as HTMLScriptElement;
 
@@ -16,7 +22,7 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
 
         new window.TradingView.widget({
           autosize: true,
-          symbol: ticker.endsWith('.KS') ? `KRX:${ticker.replace('.KS', '')}` : (ticker.endsWith('.KQ') ? `KOSDAQ:${ticker.replace('.KQ', '')}` : ticker),
+          symbol: ticker,
           interval: "D",
           timezone: "Asia/Seoul",
           theme: "dark",
@@ -48,7 +54,20 @@ export default function TradingViewWidget({ ticker }: { ticker: string }) {
       // Script already exists, just initialize the widget
       initWidget();
     }
-  }, [ticker]);
+  }, [ticker, isKoreanStock]);
+
+  if (isKoreanStock) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-white rounded-xl overflow-hidden p-2">
+        {/* Using unoptimized standard img tag since it's an external dynamic URL */}
+        <img
+          src={naverChartUrl}
+          alt={`${ticker} 차트`}
+          className="w-full h-full object-contain"
+        />
+      </div>
+    );
+  }
 
   return (
     <div id={containerId} ref={containerRef} className="w-full h-full" />
