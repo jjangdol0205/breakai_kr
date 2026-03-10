@@ -17,10 +17,6 @@ export async function POST() {
         console.log("Screener STDOUT:", stdout);
         if (stderr) console.error("Screener STDERR:", stderr);
 
-        if (stdout.includes("Already found today's pick")) {
-            return NextResponse.json({ success: true, message: "Skipped: Today's pick already exists." });
-        }
-
         return NextResponse.json({ success: true, message: "Screener ran successfully. Check the Picks dashboard." });
 
     } catch (error) {

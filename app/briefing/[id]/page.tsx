@@ -8,13 +8,13 @@ import ShareButtons from "../../components/ShareButtons";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata({ params }: { params: Promise<{ date: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
     const supabaseServer = await createClient();
     const { data: summary } = await supabaseServer
         .from('market_summaries')
         .select('title')
-        .eq('date', resolvedParams.date)
+        .eq('id', resolvedParams.id)
         .single();
 
     return {
@@ -23,14 +23,14 @@ export async function generateMetadata({ params }: { params: Promise<{ date: str
     };
 }
 
-export default async function BriefingDetailPage({ params }: { params: Promise<{ date: string }> }) {
+export default async function BriefingDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const resolvedParams = await params;
     const supabaseServer = await createClient();
 
     const { data: summary, error } = await supabaseServer
         .from('market_summaries')
         .select('*')
-        .eq('date', resolvedParams.date)
+        .eq('id', resolvedParams.id)
         .single();
 
     if (error || !summary) {
@@ -88,7 +88,7 @@ export default async function BriefingDetailPage({ params }: { params: Promise<{
 
                         {/* Custom Share Action Placeholder */}
                         <div className="text-zinc-500 hover:text-blue-400 cursor-pointer transition-colors p-2 rounded-full hover:bg-zinc-900 border border-transparent hover:border-zinc-800">
-                            <ShareButtons title={`마켓 브리핑: ${cleanTitle}`} url={`/briefing/${summary.date}`} description={summary.content.substring(0, 100) + '...'} />
+                            <ShareButtons title={`마켓 브리핑: ${cleanTitle}`} url={`/briefing/${summary.id}`} description={summary.content.substring(0, 100) + '...'} />
                         </div>
                     </div>
                 </header>

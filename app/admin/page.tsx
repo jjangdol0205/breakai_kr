@@ -36,6 +36,13 @@ export default function AdminPage() {
     const [profiles, setProfiles] = useState<any[]>([]);
     const [fetchingProfiles, setFetchingProfiles] = useState(true);
 
+    // For Daily Briefing Management
+    const [briefings, setBriefings] = useState<any[]>([]);
+    const [fetchingBriefings, setFetchingBriefings] = useState(true);
+    const [editingBriefingId, setEditingBriefingId] = useState<string | null>(null);
+    const [editBriefingTitle, setEditBriefingTitle] = useState("");
+    const [editBriefingContent, setEditBriefingContent] = useState("");
+
     // For company requests
     const [companyRequests, setCompanyRequests] = useState<any[]>([]);
     const [fetchingRequests, setFetchingRequests] = useState(true);
@@ -99,6 +106,19 @@ export default function AdminPage() {
                 console.error("Failed to fetch company requests", e);
             }
             setFetchingRequests(false);
+
+            // Fetch Market Briefings
+            setFetchingBriefings(true);
+            try {
+                const { data: briefData } = await supabase
+                    .from('market_summaries')
+                    .select('id, date, title, content, created_at')
+                    .order('created_at', { ascending: false });
+                if (briefData) setBriefings(briefData);
+            } catch (e) {
+                console.error("Failed to fetch briefings", e);
+            }
+            setFetchingBriefings(false);
         };
 
         checkAuth();
@@ -195,6 +215,50 @@ export default function AdminPage() {
         } else {
             console.error("Failed to delete request", error);
             alert("삭제 실패: 권한 문제일 수 있습니다. (SQL Editor에서 추가한 Delete Policy 실행 필요)");
+        }
+    };
+
+    const handleEditBriefingOpen = (briefing: any) => {
+        setEditingBriefingId(briefing.id);
+        setEditBriefingTitle(briefing.title || "");
+        setEditBriefingContent(briefing.content || "");
+    };
+
+    const handleUpdateBriefing = async () => {
+        if (!editingBriefingId) return;
+        if (!confirm("Are you sure you want to save these changes to the Daily Market Briefing?")) return;
+
+        const { error } = await supabase
+            .from('market_summaries')
+            .update({
+                title: editBriefingTitle,
+                content: editBriefingContent
+            })
+            .eq('id', editingBriefingId);
+
+        if (!error) {
+            setBriefings(prev => prev.map(b => b.id === editingBriefingId ? { ...b, title: editBriefingTitle, content: editBriefingContent } : b));
+            setEditingBriefingId(null);
+            alert("✅ Briefing updated successfully.");
+        } else {
+            console.error("Failed to update briefing", error);
+            alert("업데이트 실패: " + error.message);
+        }
+    };
+
+    const handleDeleteBriefing = async (id: string) => {
+        if (!confirm("Are you sure you want to completely delete this market briefing?")) return;
+
+        const { error } = await supabase
+            .from('market_summaries')
+            .delete()
+            .eq('id', id);
+
+        if (!error) {
+            setBriefings(prev => prev.filter(b => b.id !== id));
+        } else {
+            console.error("Failed to delete briefing", error);
+            alert("삭제 실패: " + error.message);
         }
     };
 
@@ -558,6 +622,103 @@ export default function AdminPage() {
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
                                             </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Daily Market Briefing Database */}
+            <div className="bg-[#111] border border-[#333] rounded-xl overflow-hidden shadow-2xl mb-12">
+                <div className="p-6 border-b border-[#333] flex justify-between items-center bg-[#151515]">
+                    <h2 className="text-xl font-bold flex items-center text-white">
+                        <FileText className="w-5 h-5 mr-3 text-emerald-500" />
+                        Daily Market Briefings
+                    </h2>
+                    <span className="text-zinc-500 font-mono text-sm">{briefings.length} Briefings</span>
+                </div>
+
+                <div className="bg-[#09090b]">
+                    {fetchingBriefings ? (
+                        <div className="p-12 text-center text-zinc-500">
+                            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-3" />
+                            Loading briefings...
+                        </div>
+                    ) : briefings.length === 0 ? (
+                        <div className="p-12 text-center text-zinc-500">
+                            <AlertTriangle className="w-10 h-10 mx-auto mb-4 opacity-50 text-emerald-500" />
+                            No market briefings found.
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-sm whitespace-nowrap">
+                                <thead className="bg-[#18181b] border-b border-[#333]">
+                                    <tr>
+                                        <th className="px-6 py-4 font-mono text-zinc-500 uppercase tracking-widest text-xs font-bold w-1/4">Date</th>
+                                        <th className="px-6 py-4 font-mono text-zinc-500 uppercase tracking-widest text-xs font-bold w-1/2">Title</th>
+                                        <th className="px-6 py-4 font-mono text-zinc-500 uppercase tracking-widest text-xs font-bold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-800">
+                                    {briefings.map((briefing) => (
+                                        <tr key={briefing.id} className="hover:bg-zinc-900/50 transition-colors">
+                                            {editingBriefingId === briefing.id ? (
+                                                <td colSpan={3} className="px-6 py-4">
+                                                    <div className="flex flex-col gap-4 bg-[#151515] p-6 rounded-lg border border-[#333]">
+                                                        <div>
+                                                            <label className="block text-xs font-bold font-mono text-zinc-500 mb-2">TITLE</label>
+                                                            <input
+                                                                type="text"
+                                                                value={editBriefingTitle}
+                                                                onChange={(e) => setEditBriefingTitle(e.target.value)}
+                                                                className="w-full bg-black border border-zinc-700 rounded px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <label className="block text-xs font-bold font-mono text-zinc-500 mb-2">CONTENT (MARKDOWN)</label>
+                                                            <textarea
+                                                                rows={10}
+                                                                value={editBriefingContent}
+                                                                onChange={(e) => setEditBriefingContent(e.target.value)}
+                                                                className="w-full bg-black border border-zinc-700 rounded px-3 py-2 text-white focus:outline-none focus:border-emerald-500 font-mono text-xs leading-relaxed resize-y whitespace-pre-wrap"
+                                                                style={{ whiteSpace: 'pre-wrap' }}
+                                                            />
+                                                        </div>
+                                                        <div className="flex justify-end gap-3 mt-2">
+                                                            <button
+                                                                onClick={() => setEditingBriefingId(null)}
+                                                                className="px-4 py-2 rounded border border-zinc-700 hover:bg-zinc-800 text-zinc-300 transition-colors text-xs font-bold tracking-widest"
+                                                            >
+                                                                CANCEL
+                                                            </button>
+                                                            <button
+                                                                onClick={handleUpdateBriefing}
+                                                                className="px-4 py-2 rounded bg-emerald-600 hover:bg-emerald-500 text-white transition-colors text-xs font-bold tracking-widest"
+                                                            >
+                                                                SAVE CHANGES
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            ) : (
+                                                <>
+                                                    <td className="px-6 py-4 font-mono text-zinc-400">{briefing.date}</td>
+                                                    <td className="px-6 py-4 text-white font-bold whitespace-normal max-w-md line-clamp-2">{briefing.title}</td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        <div className="flex justify-end gap-2">
+                                                            <button onClick={() => handleEditBriefingOpen(briefing)} className="p-1.5 text-zinc-600 hover:text-emerald-500 hover:bg-emerald-500/10 rounded transition-colors" title="Edit Briefing">
+                                                                <Star className="w-4 h-4" />
+                                                            </button>
+                                                            <button onClick={() => handleDeleteBriefing(briefing.id)} className="p-1.5 text-zinc-600 hover:text-blue-500 hover:bg-blue-500/10 rounded transition-colors" title="Delete Briefing">
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </>
+                                            )}
                                         </tr>
                                     ))}
                                 </tbody>

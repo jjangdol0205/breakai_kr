@@ -85,7 +85,7 @@ export default async function BriefingPage() {
                         const cleanTitle = summary.title.replace(/\*\*/g, '').trim();
 
                         return (
-                            <Link href={`/briefing/${summary.date}`} key={summary.id} className="block group">
+                            <Link href={`/briefing/${summary.id}`} key={summary.id} className="block group">
                                 <div className={`relative flex flex-col h-full bg-[#0a0a0c] border transition-all duration-300 rounded-2xl overflow-hidden ${isLatest ? 'border-blue-500/50 shadow-[0_0_30px_rgba(59,130,246,0.1)] hover:border-blue-400' : 'border-zinc-800 hover:border-zinc-700'}`}>
 
                                     {isLatest && (
