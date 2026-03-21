@@ -1,11 +1,15 @@
-name: Daily O'Neil Screener & AI Analyst
+name: "Daily O'Neil Screener & Market Briefing Automation"
 
 on:
+  schedule:
+    # Runs at 21:00 UTC every day.
+    # 21:00 UTC corresponds to 06:00 AM KST (Korean Standard Time)
+    - cron: '0 21 * * *'
   workflow_dispatch:
     # Allows you to manually trigger the run from the GitHub Actions tab anytime
 
 jobs:
-  run-screener:
+  run-daily-automations:
     runs-on: ubuntu-latest
     
     steps:
@@ -22,11 +26,19 @@ jobs:
       - name: Install dependencies
         run: npm ci || npm install # Fallback to install if package-lock is missing
 
+      - name: Run Daily Market Briefing Generation (AI)
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate_briefing.mjs
+
       - name: Run Breakout AI Screener
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DART_API_KEY: ${{ secrets.DART_API_KEY }}
         run: node scripts/oneil_screener.mjs
 
       - name: Auto-commit and Push generated reports
@@ -36,8 +48,8 @@ jobs:
           git add -A
           # Check if there are any changes to commit before running git commit
           if ! git diff --staged --quiet; then
-            git commit -m "🤖 Auto-generated Daily AI Stock Report [skip ci]"
+            git commit -m "🤖 Auto-generated Daily Automations [skip ci]"
             git push origin main
           else
-            echo "No changes to commit."
+            echo "No changes to commit from scripts."
           fi
