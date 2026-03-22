@@ -6,9 +6,9 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const geminiApiKey = process.env.GEMINI_API_KEY;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+const geminiApiKey = process.env.GEMINI_API_KEY?.trim();
 
 if (!supabaseUrl || !supabaseKey || !geminiApiKey) {
     console.error("Missing required environment variables.");
@@ -216,7 +216,7 @@ async function fetchDartFinancials(companyName) {
     const corpCode = getDartCorpCode(companyName);
     if (!corpCode) return null;
 
-    const apiKey = process.env.DART_API_KEY;
+    const apiKey = process.env.DART_API_KEY?.trim();
     if (!apiKey) return null;
 
     try {
