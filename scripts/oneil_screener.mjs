@@ -6,9 +6,19 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
-const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/[^a-zA-Z0-9\-_.://?&=]/g, '');
-const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
-const geminiApiKey = (process.env.GEMINI_API_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
+const cleanUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/[^a-zA-Z0-9\-_.://?&=]/g, '');
+const cleanKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
+const cleanGemini = (process.env.GEMINI_API_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
+
+process.env.NEXT_PUBLIC_SUPABASE_URL = cleanUrl;
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = cleanKey;
+process.env.GEMINI_API_KEY = cleanGemini;
+
+const supabaseUrl = cleanUrl;
+const supabaseKey = cleanKey;
+const geminiApiKey = cleanGemini;
+
+console.log("Breakout AI Screener v3: Environment variables sanitized globally.");
 
 if (!supabaseUrl || !supabaseKey || !geminiApiKey) {
     console.error("Missing required environment variables.");

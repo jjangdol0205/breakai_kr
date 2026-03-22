@@ -11,9 +11,17 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 
-const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/[^a-zA-Z0-9\-_.://?&=]/g, '');
-const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
+const cleanUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/[^a-zA-Z0-9\-_.://?&=]/g, '');
+const cleanKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
 
+process.env.NEXT_PUBLIC_SUPABASE_URL = cleanUrl;
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = cleanKey;
+process.env.GEMINI_API_KEY = (process.env.GEMINI_API_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
+
+const supabaseUrl = cleanUrl;
+const supabaseKey = cleanKey;
+
+console.log("Breakout AI Script v3: Environment variables sanitized globally.");
 if (!supabaseUrl || !supabaseKey) {
     console.error("Missing required environment variables for Supabase.");
     process.exit(1);
