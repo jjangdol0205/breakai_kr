@@ -11,8 +11,8 @@ const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') });
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/[\r\n\s]+/g, '');
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.replace(/[\r\n\s]+/g, '');
+const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/[^a-zA-Z0-9\-_.://?&=]/g, '');
+const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').replace(/[^a-zA-Z0-9\-_.]/g, '');
 
 if (!supabaseUrl || !supabaseKey) {
     console.error("Missing required environment variables for Supabase.");
