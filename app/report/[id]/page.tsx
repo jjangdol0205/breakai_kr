@@ -12,6 +12,7 @@ import ShareButtons from "../../components/ShareButtons";
 import LeadMagnet from "../../components/LeadMagnet";
 import CompanyLogo from "../../../components/CompanyLogo";
 import CoupangBanner from "../../components/CoupangBanner";
+import InfluencerStoreBanner from "../../components/InfluencerStoreBanner";
 
 // Force dynamic rendering since we are fetching data that changes
 export const dynamic = "force-dynamic";
@@ -169,7 +170,8 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             </section>
 
             {/* Affiliate Marketing Integration */}
-            <section className="mt-8">
+            <section className="mt-8 flex flex-col gap-4">
+                <InfluencerStoreBanner theme="financial" />
                 <CoupangBanner />
             </section>
 
