@@ -11,6 +11,7 @@ import { createClient } from "../../../utils/supabase/server";
 import ShareButtons from "../../components/ShareButtons";
 import LeadMagnet from "../../components/LeadMagnet";
 import CompanyLogo from "../../../components/CompanyLogo";
+import CoupangBanner from "../../components/CoupangBanner";
 
 // Force dynamic rendering since we are fetching data that changes
 export const dynamic = "force-dynamic";
@@ -165,6 +166,11 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             {/* Always Visible: External TradingView Button */}
             <section className="w-full rounded-xl overflow-hidden border border-zinc-800/50 relative shadow-2xl mt-8">
                 <TradingViewWidget ticker={report.ticker} />
+            </section>
+
+            {/* Affiliate Marketing Integration */}
+            <section className="mt-8">
+                <CoupangBanner />
             </section>
 
             {/* The Paywall Logic */}
