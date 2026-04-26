@@ -1,7 +1,7 @@
 import { createClient } from "../../utils/supabase/server";
 import Link from "next/link";
 import { ArrowUpRight, Globe, TrendingUp, Calendar, Newspaper, BarChart3 } from "lucide-react";
-import CoupangCategory from "../../components/CoupangCategory";
+import CoupangCategory from "../components/CoupangCategory";
 
 export const metadata = {
     title: "BREAKAI_KR | 일일 마켓 브리핑",

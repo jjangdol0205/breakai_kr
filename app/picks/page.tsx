@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, Cpu, Activity, TrendingUp, Presentation } from "lucide-react";
 import { fetchLiveQuote } from "../../utils/yahooFinance";
 import { getTickerByName, getNameByTicker } from "../../utils/koreanStocks";
-import CoupangDynamic from "../../components/CoupangDynamic";
+import CoupangDynamic from "../components/CoupangDynamic";
 
 export const metadata = {
     title: "BREAKAI_KR | 기관급 주식 스크리너",
