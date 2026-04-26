@@ -20,6 +20,8 @@ export default function CoupangSearch() {
                         frameBorder="0" 
                         scrolling="no" 
                         referrerPolicy="unsafe-url" 
+                        //@ts-ignore - React doesn't fully support browsingtopics yet
+                        browsingtopics="true"
                         title="Coupang Search"
                     ></iframe>
                 </div>
