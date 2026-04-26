@@ -1,6 +1,7 @@
 import { createClient } from "../../utils/supabase/server";
 import Link from "next/link";
 import { ArrowUpRight, Globe, TrendingUp, Calendar, Newspaper, BarChart3 } from "lucide-react";
+import CoupangCategory from "../../components/CoupangCategory";
 
 export const metadata = {
     title: "BREAKAI_KR | 일일 마켓 브리핑",
@@ -39,6 +40,8 @@ export default async function BriefingPage() {
                     </p>
                 </div>
             </div>
+
+            <CoupangCategory />
 
             {/* List Section */}
             <div className="max-w-6xl mx-auto px-6 py-16 relative z-10">

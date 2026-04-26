@@ -11,7 +11,8 @@ import { createClient } from "../../../utils/supabase/server";
 import ShareButtons from "../../components/ShareButtons";
 import LeadMagnet from "../../components/LeadMagnet";
 import CompanyLogo from "../../../components/CompanyLogo";
-import CoupangBanner from "../../components/CoupangBanner";
+import CoupangSearch from "../../components/CoupangSearch";
+import CoupangCategory from "../../components/CoupangCategory";
 import InfluencerStoreBanner from "../../components/InfluencerStoreBanner";
 
 // Force dynamic rendering since we are fetching data that changes
@@ -164,6 +165,9 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
                 </div>
             </section>
 
+            {/* Affiliate Marketing Integration - Search Widget */}
+            <CoupangSearch />
+
             {/* Always Visible: External TradingView Button */}
             <section className="w-full rounded-xl overflow-hidden border border-zinc-800/50 relative shadow-2xl mt-8">
                 <TradingViewWidget ticker={report.ticker} />
@@ -172,7 +176,6 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             {/* Affiliate Marketing Integration */}
             <section className="mt-8 flex flex-col gap-4">
                 <InfluencerStoreBanner theme="financial" />
-                <CoupangBanner />
             </section>
 
             {/* The Paywall Logic */}
@@ -195,6 +198,9 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             < section className="mt-20" >
                 <LeadMagnet />
             </section >
+
+            {/* Affiliate Marketing Integration - Category Banner */}
+            <CoupangCategory />
         </div >
     );
 }
