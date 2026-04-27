@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { sendTelegramMessage } from './telegram_bot.mjs';
+import { broadcastToSocialMedia } from './social_poster.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -168,6 +169,18 @@ ${summarySnippet}...
 <a href="${siteUrl}/briefing">👉 브리핑 바로가기</a>
 `;
         await sendTelegramMessage(telegramMessage.trim());
+
+        const snsMessage = `
+📈 [오늘의 마켓 브리핑 요약]
+${summarySnippet.substring(0, 150)}...
+
+AI가 짚어주는 오늘의 핵심 주식 테마와 글로벌 증시 동향!
+리포트 전문은 아래 사이트에서 무료로 확인하세요 👇
+${siteUrl}
+
+#주식 #국내주식 #미국주식 #단테3번자리 #BreakoutAI
+`;
+        await broadcastToSocialMedia(snsMessage.trim());
     } catch (err) {
         console.error("Fatal error generating daily summary:", err);
         process.exit(1);

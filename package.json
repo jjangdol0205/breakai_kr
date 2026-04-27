@@ -30,6 +30,7 @@
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "resend": "^6.9.2",
+    "twitter-api-v2": "^1.29.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {

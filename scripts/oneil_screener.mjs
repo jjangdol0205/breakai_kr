@@ -4,6 +4,7 @@ import fetch from 'cross-fetch';
 import dotenv from 'dotenv';
 import path from 'path';
 import { sendTelegramMessage } from './telegram_bot.mjs';
+import { broadcastToSocialMedia } from './social_poster.mjs';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
@@ -469,6 +470,20 @@ async function main() {
 <a href="${siteUrl}/picks">👉 추천 종목 바로가기</a>
 `;
                     await sendTelegramMessage(telegramMessage.trim());
+
+                    const snsMessage = `
+🚀 [AI 종목 포착: ${candidate.name} (${candidate.ticker})]
+AI 알고리즘 점수: ${candidate.score}/100
+
+💡 ${candidate.details.message}
+
+월스트리트 수준의 AI 펀더멘털+기술적 심층 리포트가 성공적으로 발행되었습니다. 
+대시세 초입을 선점하세요! 👇
+${siteUrl}/picks
+
+#주식추천 #급등주 #단테3번자리 #BreakoutAI #${candidate.name.replace(/\s+/g, '')}
+`;
+                    await broadcastToSocialMedia(snsMessage.trim());
                 }
             } else {
                 console.log(`   ❌ AI Report generation failed for ${candidate.ticker}. Moving to next...`);
