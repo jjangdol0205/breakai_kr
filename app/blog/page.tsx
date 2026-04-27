@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function BlogList() {
     const blogDir = path.join(process.cwd(), 'content/blog');
-    let posts = [];
+    let posts: any[] = [];
     
     if (fs.existsSync(blogDir)) {
         const files = fs.readdirSync(blogDir);
