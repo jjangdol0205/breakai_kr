@@ -6,9 +6,18 @@ import { Lock, Unlock, ExternalLink } from 'lucide-react';
 export default function ContentLocker({ children }: { children: React.ReactNode }) {
     const [isUnlocked, setIsUnlocked] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [buttonText, setButtonText] = useState("스폰서 방문하고 즉시 해제하기");
 
     useEffect(() => {
         setIsMounted(true);
+        const copyList = [
+            "🎁 오늘의 로켓배송 핫딜 보고 리포트 해제하기",
+            "⚡ 스폰서 링크 1초 방문하고 전체 분석 보기",
+            "👇 스크롤 내리기 전, 오늘만 할인하는 특가 확인하기",
+            "🚀 쿠팡 기획전 구경하고 리포트 영구 잠금 해제"
+        ];
+        setButtonText(copyList[Math.floor(Math.random() * copyList.length)]);
+        
         // Check if unlocked in localStorage
         const unlocked = localStorage.getItem('breakai_report_unlocked');
         if (unlocked === 'true') {
@@ -58,7 +67,7 @@ export default function ContentLocker({ children }: { children: React.ReactNode 
                         className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-red-500/25 active:scale-95 border border-red-500"
                     >
                         <Unlock className="w-5 h-5" />
-                        <span>스폰서 방문하고 즉시 해제하기</span>
+                        <span>{buttonText}</span>
                         <ExternalLink className="w-4 h-4 ml-1 opacity-70" />
                     </button>
                     
