@@ -14,9 +14,57 @@ import CompanyLogo from "../../../components/CompanyLogo";
 import CoupangSearch from "../../components/CoupangSearch";
 import CoupangCategory from "../../components/CoupangCategory";
 import InfluencerStoreBanner from "../../components/InfluencerStoreBanner";
+import ContentLocker from "../../components/ContentLocker";
 
 // Force dynamic rendering since we are fetching data that changes
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    
+    // Fetch report from Supabase
+    const { data: report } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('id', id)
+        .single();
+        
+    if (!report) return { title: "Breakout AI | Report Not Found" };
+    
+    const title = `${report.ticker} AI Deep Analysis Report | BreakAI`;
+    const description = report.one_line_summary || "Wall street lies exposed.";
+    
+    // Construct OG Image URL
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://breakai.vercel.app';
+    const ogUrl = new URL(`${baseUrl}/api/og`);
+    ogUrl.searchParams.set('title', report.one_line_summary || '');
+    ogUrl.searchParams.set('ticker', report.ticker || '');
+    ogUrl.searchParams.set('score', report.risk_score?.toString() || '0');
+    ogUrl.searchParams.set('verdict', report.verdict || 'HOLD');
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            images: [
+                {
+                    url: ogUrl.toString(),
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [ogUrl.toString()],
+        },
+    };
+}
 
 export default async function ReportPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -166,7 +214,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
             </section>
 
             {/* Affiliate Marketing Integration - Search Widget */}
-            <CoupangSearch />
+            <CoupangSearch keyword={report.ticker} />
 
             {/* Always Visible: External TradingView Button */}
             <section className="w-full rounded-xl overflow-hidden border border-zinc-800/50 relative shadow-2xl mt-8">
@@ -180,18 +228,33 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
 
             {/* The Paywall Logic */}
             <section className="mt-12">
-                {/* ALWAYS Render beautiful markdown for free tier */}
-                <div className="bg-[#111] rounded-2xl border border-[#333] p-10 shadow-2xl">
-                    <div className="prose prose-invert prose-lg max-w-none prose-headings:mt-10 prose-headings:font-black prose-h1:text-5xl prose-h2:text-4xl prose-p:leading-loose prose-p:text-gray-300 prose-p:mb-8 prose-li:mb-3">
-                        {cleanMarkdown ? (
-                            <ReactMarkdown remarkPlugins={[remarkBreaks]}>{cleanMarkdown}</ReactMarkdown>
-                        ) : (
-                            <pre className="font-mono text-gray-300 whitespace-pre-wrap">
-                                {report.analysis_text}
-                            </pre>
-                        )}
+                {isProUser ? (
+                    <div className="bg-[#111] rounded-2xl border border-[#333] p-10 shadow-2xl">
+                        <div className="prose prose-invert prose-lg max-w-none prose-headings:mt-10 prose-headings:font-black prose-h1:text-5xl prose-h2:text-4xl prose-p:leading-loose prose-p:text-gray-300 prose-p:mb-8 prose-li:mb-3">
+                            {cleanMarkdown ? (
+                                <ReactMarkdown remarkPlugins={[remarkBreaks]}>{cleanMarkdown}</ReactMarkdown>
+                            ) : (
+                                <pre className="font-mono text-gray-300 whitespace-pre-wrap">
+                                    {report.analysis_text}
+                                </pre>
+                            )}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <ContentLocker>
+                        <div className="bg-[#111] rounded-2xl border border-[#333] p-10 shadow-2xl">
+                            <div className="prose prose-invert prose-lg max-w-none prose-headings:mt-10 prose-headings:font-black prose-h1:text-5xl prose-h2:text-4xl prose-p:leading-loose prose-p:text-gray-300 prose-p:mb-8 prose-li:mb-3">
+                                {cleanMarkdown ? (
+                                    <ReactMarkdown remarkPlugins={[remarkBreaks]}>{cleanMarkdown}</ReactMarkdown>
+                                ) : (
+                                    <pre className="font-mono text-gray-300 whitespace-pre-wrap">
+                                        {report.analysis_text}
+                                    </pre>
+                                )}
+                            </div>
+                        </div>
+                    </ContentLocker>
+                )}
             </section >
 
             {/* Newsletter Subscription (Retention Loop) */}

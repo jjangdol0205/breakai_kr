@@ -5,6 +5,8 @@ import TopNav from "./components/TopNav";
 import DisableCopy from "@/components/DisableCopy";
 import PromoBanner from "./components/PromoBanner";
 import CookieConsent from "./components/CookieConsent";
+import CoupangStickyBanner from "./components/CoupangStickyBanner";
+import ExitIntentPopup from "./components/ExitIntentPopup";
 import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -64,6 +66,8 @@ export default function RootLayout({
             </div>
           </footer>
           <CookieConsent />
+          <CoupangStickyBanner />
+          <ExitIntentPopup />
         </div>
       </body>
     </html>

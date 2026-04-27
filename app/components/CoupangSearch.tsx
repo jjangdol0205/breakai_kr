@@ -2,14 +2,14 @@
 
 import React from 'react';
 
-export default function CoupangSearch() {
+export default function CoupangSearch({ keyword }: { keyword?: string }) {
     return (
         <div className="w-full flex justify-center my-8">
             <div className="w-full max-w-[680px] bg-zinc-900 rounded-xl border border-zinc-800 p-4 shadow-xl hover:border-red-500/30 transition-colors">
                 <div className="text-center mb-2">
                     <p className="text-xs text-zinc-500 font-mono flex items-center justify-center gap-1">
                         <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                        투자자 인기 상품 검색
+                        {keyword ? `${keyword} 주주들이 많이 찾는 추천 상품` : '투자자 인기 상품 검색'}
                     </p>
                 </div>
                 <div className="w-full rounded-lg overflow-hidden flex justify-center">

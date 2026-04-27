@@ -3,6 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import fetch from 'cross-fetch';
 import dotenv from 'dotenv';
 import path from 'path';
+import { sendTelegramMessage } from './telegram_bot.mjs';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
@@ -329,11 +330,13 @@ You MUST structure your response exactly as follows. Do NOT deviate.
 제 4 장. 폭발적 상승 트리거: 대시세(4번자리)를 견인할 재료
 제 5 장. 리스크 요인 
 제 6 장. 최종 목표가 및 224일선 기준 매매 시나리오
+제 7 장. 💡 애널리스트의 추천 아이템
 
 **작성 지침**:
 - 가장 먼저 **제 1 장(기술적 분석)**에서 **"단테의 3번자리(밥그릇 패턴)"** 차트 메커니즘 관점(112, 224일선 지지, 세력의 기나긴 1~2번자리 매집 이후 3번자리 머리내밀기 등)으로 이 주식을 왜 "지금" 사야 하는지 명쾌하게 서술하십시오.
 - 이어서 그 차트상의 대시세 초입(3번자리)을 탄탄하게 뒷받침할 "세력의 명분"을 **제 2 장~제 4 장(재무, 비전, 촉매제)**에서 자연스럽게 풀어나가십시오.
 - 이전처럼 "기술적 분석"과 "기본적 분석"을 기계적이나 인위적으로 분리하지 말고, 하나의 거대한 투자 스토리텔링 라인으로 자연스럽고 유려하게 연결하십시오.
+- 마지막 **제 7 장. 💡 애널리스트의 추천 아이템** 섹션을 반드시 추가하여, 해당 종목의 섹터나 특징과 연관된 제품(예: IT주면 전자기기 등)을 1문장으로 유머러스하게 추천하고 다음 스폰서 링크를 붙여넣으십시오: "[👉 AI 추천 관련 특가 상품 확인하기 (스폰서 링크)](https://coupa.ng/cmAdDy)"
 `;
 
     try {
@@ -408,7 +411,8 @@ async function main() {
                     ticker: stock.ticker,    // Save actual TICKER symbol to DB
                     yfTicker: stock.ticker,
                     score: analysis.score,
-                    details: analysis.details
+                    details: analysis.details,
+                    name: stock.name
                 });
             }
             // Wait to avoid rate limits
@@ -449,6 +453,22 @@ async function main() {
                 } else {
                     console.log(`   ✅ Successfully saved today's pick (${candidate.ticker}) to database!`);
                     success = true;
+                    
+                    // --- Telegram Notification ---
+                    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://breakai.vercel.app';
+                    const telegramMessage = `
+🚀 <b>[AI 픽업 종목 감지]</b>
+<b>종목:</b> ${candidate.name} (${candidate.ticker})
+<b>AI 알고리즘 점수:</b> ${candidate.score}/100
+
+💡 <i>${candidate.details.message}</i>
+
+월스트리트 수준의 AI(펀더멘털+기술적 분석) 심층 리포트가 성공적으로 발행되었습니다. 지금 바로 확인하고 대시세 초입을 선점하세요!
+
+👇 <b>종목 분석 리포트 확인하기:</b>
+<a href="${siteUrl}/picks">👉 추천 종목 바로가기</a>
+`;
+                    await sendTelegramMessage(telegramMessage.trim());
                 }
             } else {
                 console.log(`   ❌ AI Report generation failed for ${candidate.ticker}. Moving to next...`);
