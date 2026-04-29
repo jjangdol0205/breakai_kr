@@ -54,6 +54,7 @@ async function main() {
             model: google("gemini-2.5-flash"),
             prompt: prompt,
             temperature: 0.8,
+            maxRetries: 7,
         });
 
         // Save to content/blog directory

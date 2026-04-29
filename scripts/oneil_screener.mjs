@@ -340,8 +340,21 @@ You MUST structure your response exactly as follows. Do NOT deviate.
 - 마지막 **제 7 장. 💡 애널리스트의 추천 아이템** 섹션을 반드시 추가하여, 해당 종목의 섹터나 특징과 연관된 제품(예: IT주면 전자기기 등)을 1문장으로 유머러스하게 추천하고 다음 스폰서 링크를 붙여넣으십시오: "[👉 AI 추천 관련 특가 상품 확인하기 (스폰서 링크)](https://coupa.ng/cmAdDy)"
 `;
 
+    let retries = 5;
+    let result = null;
+    while (retries > 0) {
+        try {
+            result = await model.generateContent(prompt);
+            break;
+        } catch (e) {
+            console.warn(`⚠️ Gemini API error (Retries left: ${retries - 1}):`, e.message);
+            retries--;
+            if (retries === 0) throw e;
+            await new Promise(r => setTimeout(r, 5000)); // wait 5 seconds before retry
+        }
+    }
+    
     try {
-        const result = await model.generateContent(prompt);
         let text = result.response.text();
 
         let jsonString = "";

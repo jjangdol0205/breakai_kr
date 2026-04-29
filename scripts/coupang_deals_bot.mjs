@@ -45,6 +45,7 @@ FOMO(오늘 당장 놓치면 손해라는 심리)를 자극하고, 주식 투자
             model: google("gemini-2.5-flash"),
             prompt: prompt,
             temperature: 0.9,
+            maxRetries: 7,
         });
 
         const telegramMessage = `
