@@ -3,9 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import TopNav from "./components/TopNav";
 import DisableCopy from "@/components/DisableCopy";
-import PromoBanner from "./components/PromoBanner";
 import CookieConsent from "./components/CookieConsent";
-import CoupangStickyBanner from "./components/CoupangStickyBanner";
 import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,7 +26,6 @@ export default function RootLayout({
       <body className={`${inter.className} bg-black text-slate-200 antialiased min-h-screen flex flex-col selection:bg-[#FF3333]/30 font-sans`}>
         <DisableCopy />
         <div className="flex-grow flex flex-col">
-          <PromoBanner />
           {/* Header */}
           <TopNav />
 
@@ -65,7 +62,6 @@ export default function RootLayout({
             </div>
           </footer>
           <CookieConsent />
-          <CoupangStickyBanner />
         </div>
       </body>
     </html>

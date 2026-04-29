@@ -4,6 +4,7 @@ import { ArrowUpRight, Cpu, Activity, TrendingUp, Presentation } from "lucide-re
 import { fetchLiveQuote } from "../../utils/yahooFinance";
 import { getTickerByName, getNameByTicker } from "../../utils/koreanStocks";
 import CoupangDynamic from "../components/CoupangDynamic";
+import InterstitialLink from "../components/InterstitialLink";
 
 export const metadata = {
     title: "BREAKAI_KR | 기관급 주식 스크리너",
@@ -109,7 +110,7 @@ export default async function PicksPage() {
                         const isLatest = i === 0;
 
                         return (
-                            <Link
+                            <InterstitialLink
                                 key={pick.id}
                                 href={`/picks/${pick.id}`}
                                 className={`group flex flex-col md:flex-row items-start md:items-center justify-between p-7 rounded-2xl border transition-all duration-300 relative overflow-hidden backdrop-blur-sm ${isLatest
@@ -177,7 +178,7 @@ export default async function PicksPage() {
                                         <ArrowUpRight className="w-5 h-5" />
                                     </div>
                                 </div>
-                            </Link>
+                            </InterstitialLink>
                         );
                     })}
                 </div>
