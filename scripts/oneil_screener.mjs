@@ -285,59 +285,64 @@ async function generateAIReport(companyName, ticker, technicalDetails) {
     const today = new Date().toISOString().split('T')[0];
 
     const prompt = `
-당신은 'Breakout AI'의 최고 수석 애널리스트입니다. 깊이 있는 펀더멘털 분석과 한국 주식 시장의 실전 기술적 매매 기법인 **'주식 단테의 3번자리 (밥그릇 패턴)'**을 완벽하게 결합하여 분석합니다.
+당신은 대한민국 최고의 승률을 자랑하는 'Breakout AI' 소속의 수석 퀀트 애널리스트입니다. 당신의 분석은 월스트리트의 최상위 헤지펀드 매니저들조차 감탄할 만큼 날카롭고, 논리적이며, 독창적입니다.
 
 **엄격한 시간 기준 (매우 중요)**:
 **오늘 날짜: ${today}. 현재 연도는 2026년입니다.**
-모든 데이터, 재무 분석 및 시장 상황은 ${today} 기준으로 계산되어야 합니다. Google Search 도구를 활용해 ${companyName}(${ticker})에 대한 최신 데이터를 찾으십시오.
+모든 데이터, 재무 분석 및 시장 상황은 ${today} 기준으로 계산되어야 합니다. Google Search 도구를 활용해 오직 **${companyName} (${ticker})** 에 대한 가장 최신의 진짜 데이터만을 탐색하십시오. 절대 다른 기업과 헷갈리거나 지어내서는 안 됩니다.
 
-우리는 ${companyName}(${ticker})을(를) 오늘의 #1 단테 3번자리 관심 종목으로 선정했습니다.
-기술적 분석 요약: 현재가: ₩${technicalDetails.currentPrice.toLocaleString('ko-KR')}, 112일선: ₩${technicalDetails.ma112.toLocaleString('ko-KR')}, 224일(1년) 이동평균선: ₩${technicalDetails.ma224.toLocaleString('ko-KR')}, 패턴: ${technicalDetails.message}.
+우리는 엄격한 알고리즘을 통해 **${companyName} (${ticker})** 을(를) 오늘의 압도적인 #1 픽, 일명 **'단테의 3번자리 (밥그릇 패턴)'** 급등 임박 종목으로 선정했습니다.
+
+[기술적 분석 요약 (Breakout AI 제공)]
+- 현재가: ₩${technicalDetails.currentPrice.toLocaleString('ko-KR')}
+- 112일선: ₩${technicalDetails.ma112.toLocaleString('ko-KR')}
+- 224일(1년) 이동평균선: ₩${technicalDetails.ma224.toLocaleString('ko-KR')}
+- 알고리즘 시그널: ${technicalDetails.message}
 ${dartText}
 
-전문적이고 깊이 있는 "오늘의 차트 관심주" 심층 분석 리포트를 한국어로 작성하십시오.
+이제, 이 완벽한 기술적 차트(Timing)가 왜 거대한 펀더멘털적 폭발(Conviction)로 이어질 수밖에 없는지, 전 세계 투자자들의 심장을 뛰게 만들 "초고퀄리티 딥다이브 리포트"를 한국어로 작성하십시오. 당신의 리포트는 수박 겉핥기식 요약이 아니라, 산업의 구조적 변화와 기업의 진짜 해자를 꿰뚫어보는 통찰로 가득해야 합니다.
 
 **OUTPUT FORMAT (CRITICAL)**:
-You MUST structure your response exactly as follows. Do NOT deviate.
+반드시 다음 구조를 정확하게 지켜주세요.
 
 1. First, provide the scores strictly in valid JSON wrapped in a \`\`\`json block.
-2. Second, output the Markdown report that logically flows from Technical Analysis (Timing) to Fundamental Analysis (Conviction).
+2. Second, output the Markdown report that flows powerfully.
 
 \`\`\`json
 {
   "investment_score": {
     "total": 85,
     "breakdown": [
-      { "category": "가치평가 (동종업계 대비)", "score": 22, "max_score": 30, "reason": "P/E가 확장 중이나 최근 턴어라운드가 이를 정당화함." },
-      { "category": "기술적 추세 (단테 3번자리)", "score": 28, "max_score": 30, "reason": "1, 2번자리의 기나긴 매집을 끝내고 224일선을 강력하게 돌파하는 3번자리 초입임." },
-      { "category": "스마트머니 매집 (거래량)", "score": 18, "max_score": 20, "reason": "최근 224일선 부근에서 강력한 매집봉 및 거래량 폭발 출현." },
-      { "category": "투자 촉매제 및 모멘텀", "score": 17, "max_score": 20, "reason": "섹터 훈풍과 함께 다가오는 실적 턴어라운드." }
+      { "category": "가치평가 및 실적 (Valuation)", "score": 22, "max_score": 30, "reason": "영업이익률 상승 턴어라운드가 현재 P/E 확장을 완벽히 정당화함." },
+      { "category": "기술적 추세 (단테 3번자리)", "score": 28, "max_score": 30, "reason": "지루한 1, 2번자리 매집을 끝내고 224일선을 강력히 뚫어낸 3번자리 초입." },
+      { "category": "스마트머니 매집 (Smart Money)", "score": 18, "max_score": 20, "reason": "최근 224일선 부근에서 강력한 거래량 폭발과 함께 세력의 매집봉 출현." },
+      { "category": "모멘텀 및 촉매 (Catalysts)", "score": 17, "max_score": 20, "reason": "글로벌 섹터 훈풍과 다가오는 신제품 모멘텀." }
     ]
   },
-  "verdict": "강력 매수",
-  "executive_summary": "이 펀더멘털 투자 논리를 요약하는 4개의 고부가 가치 핵심 항목(Bullet Point).",
-  "bull_case_summary": "왜 이 종목이 현재 3번자리에서 대시세(4번자리)로 갈 수밖에 없는지에 대한 두 문장.",
-  "bear_case_summary": "224일선 이탈 시 손절해야 하는 리스크 요소에 대한 날카로운 두 문장."
+  "verdict": "강력 매수 (Strong Buy)",
+  "executive_summary": "이 종목을 반드시 사야 하는 4가지 핵심 트리거 요약 (Bullet point)",
+  "bull_case_summary": "이 기업이 3번자리를 넘어 역사적 대시세(4번자리)로 폭발할 수밖에 없는 명확한 이유 (2문장)",
+  "bear_case_summary": "가장 주의해야 할 거시적/미시적 리스크 및 224일선 하향 이탈 시 손절 명분 (2문장)"
 }
 \`\`\`
 
-# ${companyName} 심층 분석 : 3번자리 호수비의 시작
+# ${companyName} (${ticker}) 심층 분석: 대시세 폭발의 전조, 단테 3번자리의 완성
 
 [목차]
-프롤로그: 왜 지금 이 기업인가?
-제 1 장. 기술적 분석: 완벽한 3번자리의 도래 (224일선 안착과 세력 매집봉)
-제 2 장. 펀더멘털 해부: 바닥을 다지고 턴어라운드하는 숫자들 (DART 데이터 기반)
-제 3 장. 비즈니스 모델(BM)과 구조적 해자
-제 4 장. 폭발적 상승 트리거: 대시세(4번자리)를 견인할 재료
-제 5 장. 리스크 요인 
-제 6 장. 최종 목표가 및 224일선 기준 매매 시나리오
-제 7 장. 💡 애널리스트의 추천 아이템
+프롤로그: 지금 시장이 ${companyName}에 주목하지 않는 이유, 그리고 우리의 기회
+제 1 장. 기술적 분석: 세력의 숨결이 느껴지는 완벽한 3번자리 (224일선의 비밀)
+제 2 장. 펀더멘털 해부: 숫자로 증명되는 턴어라운드와 숨겨진 해자
+제 3 장. 폭발적 상승 트리거: 대시세를 견인할 3가지 강력한 재료
+제 4 장. 리스크 팩터 및 대응 시나리오
+제 5 장. 최종 목표가 및 224일선 기준 최적의 매매 타점
+💡 애널리스트의 픽: (이 종목과 어울리는 기발한 상품 추천)
 
-**작성 지침**:
-- 가장 먼저 **제 1 장(기술적 분석)**에서 **"단테의 3번자리(밥그릇 패턴)"** 차트 메커니즘 관점(112, 224일선 지지, 세력의 기나긴 1~2번자리 매집 이후 3번자리 머리내밀기 등)으로 이 주식을 왜 "지금" 사야 하는지 명쾌하게 서술하십시오.
-- 이어서 그 차트상의 대시세 초입(3번자리)을 탄탄하게 뒷받침할 "세력의 명분"을 **제 2 장~제 4 장(재무, 비전, 촉매제)**에서 자연스럽게 풀어나가십시오.
+**작성 지침 (필수 준수)**:
+- **제 1 장**에서는 왜 지금 당장 이 주식의 차트를 봐야 하는지, '단테 3번자리 (밥그릇 패턴)' 이론(112, 224일선 지지, 세력의 오랜 매집 이후 고개 들기)을 바탕으로 매우 전문적으로 해설하십시오.
+- **제 2 장, 3 장**에서는 제공된 DART 데이터와 최신 검색 결과를 엮어, 회사의 비즈니스 모델(BM)과 상승 촉매제를 날카롭게 파헤치십시오.
+- 글의 톤은 확신에 차 있고, 세련되었으며, 읽는 이로 하여금 즉각적인 행동을 취하고 싶게 만들 만큼 흡입력이 있어야 합니다.
 - 이전처럼 "기술적 분석"과 "기본적 분석"을 기계적이나 인위적으로 분리하지 말고, 하나의 거대한 투자 스토리텔링 라인으로 자연스럽고 유려하게 연결하십시오.
-- 마지막 **제 7 장. 💡 애널리스트의 추천 아이템** 섹션을 반드시 추가하여, 해당 종목의 섹터나 특징과 연관된 제품(예: IT주면 전자기기 등)을 1문장으로 유머러스하게 추천하고 다음 스폰서 링크를 붙여넣으십시오: "[👉 AI 추천 관련 특가 상품 확인하기 (스폰서 링크)](https://coupa.ng/cmAdDy)"
+- **마지막 💡 애널리스트의 픽**에는 이 종목의 특성(IT, 뷰티, 식품 등)과 연관된 재치있는 상품을 추천하는 1문장과 함께 다음 링크를 정확히 넣으십시오: "[👉 AI 추천 관련 특가 상품 확인하기 (스폰서 링크)](https://coupa.ng/cmAdDy)"
 `;
 
     let retries = 5;
