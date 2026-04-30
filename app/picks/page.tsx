@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowUpRight, Cpu, Activity, TrendingUp, Presentation } from "lucide-react";
 import { fetchLiveQuote } from "../../utils/yahooFinance";
 import { getTickerByName, getNameByTicker } from "../../utils/koreanStocks";
-import CoupangDynamic from "../components/CoupangDynamic";
 import InterstitialLink from "../components/InterstitialLink";
 
 export const metadata = {
@@ -60,9 +59,7 @@ export default async function PicksPage() {
                         </Link>
                     </div>
                 </div>
-            </div>
 
-            <CoupangDynamic />
 
             {/* List Section */}
             <div className="max-w-6xl mx-auto px-6 py-16 relative z-10">
