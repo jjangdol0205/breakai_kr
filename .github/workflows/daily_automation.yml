@@ -1,10 +1,10 @@
 name: "Daily O'Neil Screener & Market Briefing Automation"
 
 on:
-  schedule:
-    # Runs at 21:00 UTC every day.
-    # 21:00 UTC corresponds to 06:00 AM KST (Korean Standard Time)
-    - cron: '0 21 * * *'
+  # schedule:
+  #   # Runs at 21:00 UTC every day.
+  #   # 21:00 UTC corresponds to 06:00 AM KST (Korean Standard Time)
+  #   - cron: '0 21 * * *'
   workflow_dispatch:
     # Allows you to manually trigger the run from the GitHub Actions tab anytime
 
