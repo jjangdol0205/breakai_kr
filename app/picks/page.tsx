@@ -59,7 +59,7 @@ export default async function PicksPage() {
                         </Link>
                     </div>
                 </div>
-
+            </div>
 
             {/* List Section */}
             <div className="max-w-6xl mx-auto px-6 py-16 relative z-10">
