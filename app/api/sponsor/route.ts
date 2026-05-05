@@ -5,7 +5,8 @@ function generateHmac(method: string, url: string, secretKey: string, accessKey:
     const parts = url.split(/\?/);
     const [path, query = ''] = parts;
 
-    const datetime = new Date().toISOString().replace(/[:\-]|\.\d{3}/g, '').replace('T', ' ').substring(0, 15) + 'Z';
+    let iso = new Date().toISOString().replace(/[:-]/g, '').replace(/\.\d{3}/, ''); // 20260430T004749Z
+    const datetime = iso.substring(2, 8) + 'T' + iso.substring(9, 15) + 'Z';
     const message = datetime + method + path + query;
 
     const signature = crypto.createHmac('sha256', secretKey)
